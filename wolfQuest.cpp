@@ -18,8 +18,8 @@ static int windowHeight;
 
 static float animationParameter = 0;
 static float animationOngoing = 0;
-float limbMovementCoef = 0;
 static float descending = 0;
+float limbMovementCoef = 0;
 
 // callback funkcije
 static void onKeyboard(unsigned char key, int x, int y);
@@ -64,7 +64,7 @@ void onReshape(int width, int height){
   // Postavljanje projekcije
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60, (float) width / height, 1, 100);
+  gluPerspective(60, (float) width / height, 1, 200);
 }
 
 void onKeyboard(unsigned char key, int x, int y){
@@ -121,15 +121,20 @@ void onDisplay(void){
   // u njusku
   // gluLookAt(20,2,0,5,3,0,0,1,0);
   // fino
-  gluLookAt(20*sin(animationParameter/360),3,20*cos(animationParameter/360),4,2,0,0,1,0);
+  // gluLookAt(20*sin(animationParameter/360),7,20*cos(animationParameter/360),4,2,0,0,1,0);
+  gluLookAt(40*sin(animationParameter/360),15,40*cos(animationParameter/360),0,0,0,0,1,0);
   // gluLookAt(4,7,10,4,2,0,0,1,0);
+  // gluLookAt(30,4,30,0,0,0,0,1,0);
 
   drawAxes(LEN);
 
-  glPushMatrix();
-    drawBalto();
-  glPopMatrix();
+  for(int i=-100;i<=100;i+=30)
+    for(int j=-100;j<=50;j+=30)
+      drawChristmasTree(i,0,j);
 
+  drawBalto();
+
+  drawTrack();
 
   glutSwapBuffers();
 }
