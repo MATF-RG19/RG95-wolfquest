@@ -47,8 +47,27 @@ void drawTrack(void){
   glPushMatrix();
     glColor3f(0.7,0.7,0.7);
     glTranslatef(0,-0.5,0);
-    glScalef(200,1,200);
+    glScalef(1000,1,24);
     glutSolidCube(1);
+  glPopMatrix();
+
+  glLineWidth(5);
+  glColor3f(1,0,0);
+  glBegin(GL_LINES);
+    glVertex3f(-300,0,4);
+    glVertex3f(300,0,4);
+    glVertex3f(-300,0,-4);
+    glVertex3f(300,0,-4);
+    glVertex3f(-300,0,12);
+    glVertex3f(300,0,12);
+    glVertex3f(-300,0,-12);
+    glVertex3f(300,0,-12);
+  glEnd();
+  glLineWidth(1);
+}
+void drawTerrain(void){
+  glPushMatrix();
+
   glPopMatrix();
 }
 void drawChristmasTree(float x, float y, float z){
