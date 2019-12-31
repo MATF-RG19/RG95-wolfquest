@@ -6,6 +6,8 @@
 #include <GL/glut.h>
 #include "drawFunc.hpp"
 
+#define randMax 20
+#define randMin 0
 struct TACKA{
   float x;
   float y;
@@ -51,7 +53,6 @@ void drawTrack(void){
     glutSolidCube(1);
   glPopMatrix();
 
-  glLineWidth(5);
   glColor3f(1,0,0);
   glBegin(GL_LINES);
     glVertex3f(-300,0,4);
@@ -63,13 +64,56 @@ void drawTrack(void){
     glVertex3f(-300,0,-12);
     glVertex3f(300,0,-12);
   glEnd();
-  glLineWidth(1);
 }
-void drawTerrain(void){
-  glPushMatrix();
 
+void drawTerrain(void){
+  glColor3f(0.7,0.7,0.7);
+  glPushMatrix();
+    glTranslatef(0,-0.5,-12);
+    glRotatef(30,1,0,0);
+    glScalef(1000,1,500);
+    glutSolidCube(1);
   glPopMatrix();
+
+  glColor3f(0.7,0.7,0.7);
+  glPushMatrix();
+    glTranslatef(0,-0.5,12);
+    glRotatef(-30,1,0,0);
+    glScalef(1000,1,500);
+    glutSolidCube(1);
+  glPopMatrix();
+
+  srand(time(NULL));
+  int range = randMax - randMin + 1;
+
+  for(int i=-200;i<=200;i+=30){
+    for(int j=12;j<=100;j+=15){
+      glPushMatrix();
+        glTranslatef(i,j/1.74-0.2,j);
+        int randNum = rand() % range + randMin;
+        glRotatef(-randNum,1,0,0);
+        double x = ((double)rand()) / ((double)RAND_MAX) / 3.0 + 0.66;
+        glScalef(x,x,x);
+        glTranslatef(-i,-j/1.74+0.2,-j);
+        drawChristmasTree(i,j/1.74-0.2,j);
+      glPopMatrix();
+    }
+  }
+  for(int i=-200;i<=200;i+=30){
+    for(int j=12;j<=100;j+=15){
+      glPushMatrix();
+        glTranslatef(i,j/1.74-0.2,-j);
+        int randNum = rand() % range + randMin;
+        glRotatef(randNum,1,0,0);
+        double x = ((double)rand()) / ((double)RAND_MAX) / 3.0 + 0.66;
+        glScalef(x,x,x);
+        glTranslatef(-i,-j/1.74+0.2,j);
+        drawChristmasTree(i,j/1.74-0.2,-j);
+      glPopMatrix();
+    }
+  }
 }
+
 void drawChristmasTree(float x, float y, float z){
   glPushMatrix();
     glTranslatef(x,y,z);
@@ -79,7 +123,7 @@ void drawChristmasTree(float x, float y, float z){
 
     glPushMatrix();
       glRotatef(-90,1,0,0);
-      glTranslatef(0,0,2);
+      glTranslatef(0,0,1.5);//bilo2
 
       glTranslatef(0,0,8);
       glutSolidCone(1.3,1.6,12,1);
@@ -102,11 +146,45 @@ void drawChristmasTree(float x, float y, float z){
       glTranslatef(0,0,-2);
 
       glutSolidCone(3.4,4,12,1);
-      glTranslatef(0,0,-2);
+      glTranslatef(0,0,-1.5);
 
       glColor3f(0.3,0.15,0);
       gluCylinder(cyl,0.75,0.75,2,10,1);
       glRotatef(90,1,0,0);
+    glPopMatrix();
+  glPopMatrix();
+  //probavam
+  glPushMatrix();
+    glTranslatef(x,y,z);
+    glScalef(1.5,1.5,1.5);
+    glColor3f(0,0,0);
+
+    glPushMatrix();
+      glRotatef(-90,1,0,0);
+      glTranslatef(0,0,1.5);//bilo2
+
+      glTranslatef(0,0,8);
+      glutWireCone(1.3,1.6,12,1);
+      glTranslatef(0,0,-8);
+
+      glTranslatef(0,0,6.8);
+      glutWireCone(1.8,2.4,12,1);
+      glTranslatef(0,0,-6.8);
+
+      glTranslatef(0,0,5.4);
+      glutWireCone(2.2,2.8,12,1);
+      glTranslatef(0,0,-5.4);
+
+      glTranslatef(0,0,3.8);
+      glutWireCone(2.8,3.2,12,1);
+      glTranslatef(0,0,-3.8);
+
+      glTranslatef(0,0,2);
+      glutWireCone(3.1,3.6,12,1);
+      glTranslatef(0,0,-2);
+
+      glutWireCone(3.4,4,12,1);
+      glTranslatef(0,0,-1.5);
     glPopMatrix();
   glPopMatrix();
 }

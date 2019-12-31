@@ -9,4 +9,3 @@ void drawTrack(void);
 void drawTerrain(void);
 
 #endif
-

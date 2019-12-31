@@ -35,7 +35,7 @@ int main(int argc, char **argv){
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
 
   // Postavljanje prozora
-  glutInitWindowSize(600, 600);
+  glutInitWindowSize(1200, 1200);
   glutInitWindowPosition(100, 100);
   glutCreateWindow("Wolf Quest");
 
@@ -121,25 +121,22 @@ void onDisplay(void){
   // u njusku
   // gluLookAt(20,2,0,5,3,0,0,1,0);
   // fino
-  // gluLookAt(20*sin(animationParameter/360),7,20*cos(animationParameter/360),4,2,0,0,1,0);
-  // gluLookAt(40*sin(animationParameter/360),15,40*cos(animationParameter/360),0,0,0,0,1,0);
+  // gluLookAt(10*sin(animationParameter/360),7,10*cos(animationParameter/360),4,2,0,0,1,0);
+  // gluLookAt(12*sin(animationParameter/360),10,12*cos(animationParameter/360),0,6,0,0,1,0);
   // gluLookAt(4,7,10,4,2,0,0,1,0);
   // gluLookAt(30,4,30,0,0,0,0,1,0);
 
   drawAxes(LEN);
 
-  // for(int i=-100;i<=100;i+=30)
-    // for(int j=-100;j<=50;j+=30)
-      // drawChristmasTree(i,0,j);
-
   drawBalto();
 
   drawTrack();
+  drawTerrain();
 
   glutSwapBuffers();
 }
 void lightInitialization(void){
-  float lightPosition[] = { 10, 10, 10, 0};
+  float lightPosition[] = { 0, 40, 0, 0};
   float lightAmbient[] = { 0.1, 0.1, 0.1, 0.1,1};
   float lightDiffuse[] = { 1, 1, 1, 1};
   float lightSpecular[] = { 0.9, 0.9, 0.9, 1};
