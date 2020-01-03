@@ -3,18 +3,34 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
 #include "drawFunc.hpp"
 
-#define randMax 20
-#define randMin 0
+using namespace std;
+
+#define GODS_EYE 300
+#define RAND_MATRIX_N 50
+#define RAND_MATRIX_M 10
+
+// kidam cpp, nista clase nista oop :(
 struct TACKA{
   float x;
   float y;
   float z;
 };
 
+struct ALLRANDOM{
+  int randAngle;
+  float randScale;
+};
+
+extern int koeficijent;
+extern float animationParameter;
+extern float turning;
 extern float limbMovementCoef;
+extern vector<vector<ALLRANDOM>> randMatrix;
 
 void drawAxes(float len){
   glDisable(GL_LIGHTING);
@@ -45,6 +61,7 @@ void setNormalAndVertex(TACKA a, TACKA b, TACKA c){
   glVertex3f(b.x, b.y, b.z);
   glVertex3f(c.x, c.y, c.z);
 }
+
 void drawTrack(void){
   glPushMatrix();
     glColor3f(0.7,0.7,0.7);
@@ -83,35 +100,30 @@ void drawTerrain(void){
     glutSolidCube(1);
   glPopMatrix();
 
-  srand(time(NULL));
-  int range = randMax - randMin + 1;
-
-  for(int i=-200;i<=200;i+=30){
-    for(int j=12;j<=100;j+=15){
-      glPushMatrix();
-        glTranslatef(i,j/1.74-0.2,j);
-        int randNum = rand() % range + randMin;
-        glRotatef(-randNum,1,0,0);
-        double x = ((double)rand()) / ((double)RAND_MAX) / 3.0 + 0.66;
-        glScalef(x,x,x);
-        glTranslatef(-i,-j/1.74+0.2,-j);
-        drawChristmasTree(i,j/1.74-0.2,j);
-      glPopMatrix();
+    for(int i=-GODS_EYE,k=0;k<RAND_MATRIX_N;i+=25,k+=1){
+      for(int j=12,q=0;q<RAND_MATRIX_M;j+=15,q+=1){
+        glPushMatrix();
+          // ASISTENT
+          // glTranslatef(i-animationParameter,j/1.74-0.2,j);
+          glTranslatef(i,j/1.74-0.2,j);
+          glRotatef(-(randMatrix[k][q].randAngle),1,0,0);
+          glScalef(randMatrix[k][q].randScale,randMatrix[k][q].randScale,randMatrix[k][q].randScale);
+          drawChristmasTree(0,0,0);
+        glPopMatrix();
+      }
     }
-  }
-  for(int i=-200;i<=200;i+=30){
-    for(int j=12;j<=100;j+=15){
-      glPushMatrix();
-        glTranslatef(i,j/1.74-0.2,-j);
-        int randNum = rand() % range + randMin;
-        glRotatef(randNum,1,0,0);
-        double x = ((double)rand()) / ((double)RAND_MAX) / 3.0 + 0.66;
-        glScalef(x,x,x);
-        glTranslatef(-i,-j/1.74+0.2,j);
-        drawChristmasTree(i,j/1.74-0.2,-j);
-      glPopMatrix();
+    for(int i=-GODS_EYE,k=0;k<RAND_MATRIX_N;i+=25,k+=1){
+      for(int j=12,q=0;q<RAND_MATRIX_M;j+=15,q+=1){
+        glPushMatrix();
+          // ASISTENT
+          // glTranslatef(i-animationParameter,j/1.74-0.2,-j);
+          glTranslatef(i,j/1.74-0.2,-j);
+          glRotatef(randMatrix[k][q].randAngle,1,0,0);
+          glScalef(randMatrix[k][q].randScale,randMatrix[k][q].randScale,randMatrix[k][q].randScale);
+          drawChristmasTree(0,0,0);
+        glPopMatrix();
+      }
     }
-  }
 }
 
 void drawChristmasTree(float x, float y, float z){
@@ -188,8 +200,9 @@ void drawChristmasTree(float x, float y, float z){
     glPopMatrix();
   glPopMatrix();
 }
-void drawBalto(void){
+void drawBalto(int baltoPosition){
   glPushMatrix();
+    glTranslatef(0,0,turning);
     GLUquadric* cyl=gluNewQuadric();
     float duzina=7.27;
     float visina=3.92;

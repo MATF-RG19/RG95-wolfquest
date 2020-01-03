@@ -1,9 +1,10 @@
 #ifndef DRAWFUNC_HPP
 #define DRAWFUNC_HPP
 
+
 void setNormalAndVertex();
 void drawAxes(float len);
-void drawBalto(void);
+void drawBalto(int baltoPosition);
 void drawChristmasTree(float x,float y,float z);
 void drawTrack(void);
 void drawTerrain(void);
