@@ -1,7 +1,6 @@
 #ifndef DRAWFUNC_HPP
 #define DRAWFUNC_HPP
 
-
 void setNormalAndVertex();
 void drawAxes(float len);
 void drawBalto(int baltoPosition);

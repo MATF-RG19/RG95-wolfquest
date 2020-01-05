@@ -15,20 +15,22 @@ using namespace std;
 #define TIMER_ID 0
 #define LEN 100
 #define GODS_EYE 300
-#define RAND_MATRIX_N 50
-#define RAND_MATRIX_M 10
+#define RAND_MATRIX_N 25
+#define RAND_MATRIX_M 9
 
 // kidam cpp, nista clase nista oop :(
-struct ALLRANDOM{
+struct CHRISTMASTREE{
   int randAngle;
   float randScale;
+  int x;
+  int z;
 };
 
-// int koeficijent=1;
+int firstTreeRow=0;
 int shouldTurnRight = 0;
 int shouldTurnLeft = 0;
 float turning = 0;
-vector<vector<ALLRANDOM>> randMatrix(RAND_MATRIX_N);
+vector<vector<CHRISTMASTREE>> randMatrix(RAND_MATRIX_N);
 
 static int baltoPosition = 0;
 
@@ -63,12 +65,27 @@ int main(int argc, char **argv){
   //predpr inicijalizacija
   for ( int i = 0 ; i < RAND_MATRIX_N; i++ )
     randMatrix[i].resize(RAND_MATRIX_M);
+
   srand(time(NULL));
   int i,j;
+  int k=-200;
+  int q=12;
   for(i=0;i<RAND_MATRIX_N;i++){
+    q=12;
     for(j=0;j<RAND_MATRIX_M;j++){
       randMatrix[i][j].randAngle=rand() % 31;
       randMatrix[i][j].randScale=((float)rand()) / ((float)RAND_MAX) / 3.0 + 0.66;
+      randMatrix[i][j].x=k;
+      randMatrix[i][j].z=q;
+      q+=15;
+    }
+    k+=25;
+  }
+  for(i=0;i<RAND_MATRIX_N;i++){
+    for(j=0;j<RAND_MATRIX_M;j++){
+      cout<<randMatrix[i][j].x<<endl;
+      cout<<randMatrix[i][j].z<<endl;
+
     }
   }
   // Registrovanje callback funkcija
@@ -105,6 +122,7 @@ void onKeyboard(unsigned char key, int x, int y){
     case 'r':
       animationParameter = 0;
       animationOngoing = 0;
+      firstTreeRow = 0;
       limbMovementCoef = 0;
       descending = 0;
       turning = 0;
@@ -155,16 +173,24 @@ void onSpecialKeyPress(int key, int x, int y){
 void onTimer(int id){
     if(id == TIMER_ID){
       animationParameter++;
-      // ASISTENT 
-        // vector<ALLRANDOM> newTreeRow;
-        // newTreeRow.resize(RAND_MATRIX_N);
-        // for(int j=0;j<10;j++){
-          // newTreeRow[j].randAngle=rand() % 31;
-          // newTreeRow[j].randScale=((float)rand()) / ((float)RAND_MAX) / 3.0 + 0.66;
-        // }
-        // randMatrix.erase(randMatrix.begin()+1);
-        // randMatrix.push_back(newTreeRow);
-      // }
+
+      if(animationOngoing){
+        for(int i=0;i<RAND_MATRIX_N;i++){
+          for(int j=0;j<RAND_MATRIX_M;j++){
+            randMatrix[i][j].x -= 1;
+          }
+        }
+        if(randMatrix[firstTreeRow][0].x == -225){
+          for(int k=0;k<RAND_MATRIX_M;k++){
+            randMatrix[firstTreeRow][k].x = 400;
+          }
+          firstTreeRow++;
+          if(firstTreeRow == RAND_MATRIX_N){
+            firstTreeRow = 0;
+          }
+        }
+      }
+
       if(shouldTurnRight && baltoPosition==1){
         turning+=0.2;
         if(turning>=8){
@@ -218,6 +244,8 @@ void onDisplay(void){
   // gluLookAt(10,2,2,5,2,0,0,1,0);
   // iza
   gluLookAt(-15,10,0,30,3,0,0,1,0);
+  // gluLookAt(20,10,0,-30,3,0,0,1,0);
+
   // u njusku
   // gluLookAt(20,2,0,5,3,0,0,1,0);
   // fino

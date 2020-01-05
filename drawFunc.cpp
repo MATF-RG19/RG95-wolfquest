@@ -11,8 +11,8 @@
 using namespace std;
 
 #define GODS_EYE 300
-#define RAND_MATRIX_N 50
-#define RAND_MATRIX_M 10
+#define RAND_MATRIX_N 25
+#define RAND_MATRIX_M 9
 
 // kidam cpp, nista clase nista oop :(
 struct TACKA{
@@ -21,16 +21,16 @@ struct TACKA{
   float z;
 };
 
-struct ALLRANDOM{
+struct CHRISTMASTREE{
   int randAngle;
   float randScale;
+  int x;
+  int z;
 };
 
-extern int koeficijent;
-extern float animationParameter;
 extern float turning;
 extern float limbMovementCoef;
-extern vector<vector<ALLRANDOM>> randMatrix;
+extern vector<vector<CHRISTMASTREE>> randMatrix;
 
 void drawAxes(float len){
   glDisable(GL_LIGHTING);
@@ -100,30 +100,28 @@ void drawTerrain(void){
     glutSolidCube(1);
   glPopMatrix();
 
-    for(int i=-GODS_EYE,k=0;k<RAND_MATRIX_N;i+=25,k+=1){
-      for(int j=12,q=0;q<RAND_MATRIX_M;j+=15,q+=1){
-        glPushMatrix();
-          // ASISTENT
-          // glTranslatef(i-animationParameter,j/1.74-0.2,j);
-          glTranslatef(i,j/1.74-0.2,j);
-          glRotatef(-(randMatrix[k][q].randAngle),1,0,0);
-          glScalef(randMatrix[k][q].randScale,randMatrix[k][q].randScale,randMatrix[k][q].randScale);
-          drawChristmasTree(0,0,0);
-        glPopMatrix();
-      }
+  for(int i=0;i<RAND_MATRIX_N;i++){
+    for(int j=0;j<RAND_MATRIX_M;j++){
+      glPushMatrix();
+        glTranslatef(randMatrix[i][j].x,randMatrix[i][j].z/1.74-0.2,randMatrix[i][j].z);
+        glRotatef(-randMatrix[i][j].randAngle,1,0,0);
+        glScalef(randMatrix[i][j].randScale,randMatrix[i][j].randScale,randMatrix[i][j].randScale);
+        drawChristmasTree(0,0,0);
+      glPopMatrix();
     }
-    for(int i=-GODS_EYE,k=0;k<RAND_MATRIX_N;i+=25,k+=1){
-      for(int j=12,q=0;q<RAND_MATRIX_M;j+=15,q+=1){
-        glPushMatrix();
-          // ASISTENT
-          // glTranslatef(i-animationParameter,j/1.74-0.2,-j);
-          glTranslatef(i,j/1.74-0.2,-j);
-          glRotatef(randMatrix[k][q].randAngle,1,0,0);
-          glScalef(randMatrix[k][q].randScale,randMatrix[k][q].randScale,randMatrix[k][q].randScale);
-          drawChristmasTree(0,0,0);
-        glPopMatrix();
-      }
+  }
+  for(int i=0;i<RAND_MATRIX_N;i++){
+    for(int j=0;j<RAND_MATRIX_M;j++){
+      glPushMatrix();
+        glTranslatef(randMatrix[i][j].x,randMatrix[i][j].z/1.74-0.2,-randMatrix[i][j].z);
+        glRotatef(randMatrix[i][j].randAngle,1,0,0);
+        glScalef(randMatrix[i][j].randScale,randMatrix[i][j].randScale,randMatrix[i][j].randScale);
+        drawChristmasTree(0,0,0);
+      glPopMatrix();
     }
+  }
+
+
 }
 
 void drawChristmasTree(float x, float y, float z){
