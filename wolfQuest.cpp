@@ -17,7 +17,8 @@ using namespace std;
 #define GODS_EYE 300
 #define RAND_MATRIX_N 25
 #define RAND_MATRIX_M 9
-
+#define RAND_OBSTACLE 100
+#define SNOW_MATRIX 500
 // kidam cpp, nista clase nista oop :(
 struct CHRISTMASTREE{
   int randAngle;
@@ -26,11 +27,18 @@ struct CHRISTMASTREE{
   int z;
 };
 
+struct OBSTACLE{
+  int type;
+  int position;
+  int x;
+};
+int firstObstacle=0;
 int firstTreeRow=0;
 int shouldTurnRight = 0;
 int shouldTurnLeft = 0;
 float turning = 0;
 vector<vector<CHRISTMASTREE>> randMatrix(RAND_MATRIX_N);
+vector<OBSTACLE> randObstacle(RAND_OBSTACLE);
 
 static int baltoPosition = 0;
 
@@ -58,7 +66,8 @@ int main(int argc, char **argv){
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
 
   // Postavljanje prozora
-  glutInitWindowSize(1200, 1200);
+  glutInitWindowSize(600, 600);
+  // glutInitWindowSize(600, 600);
   glutInitWindowPosition(100, 100);
   glutCreateWindow("Wolf Quest");
 
@@ -78,15 +87,17 @@ int main(int argc, char **argv){
       randMatrix[i][j].x=k;
       randMatrix[i][j].z=q;
       q+=15;
+      // cout<<randMatrix[i][j].x<<endl;
     }
     k+=25;
   }
-  for(i=0;i<RAND_MATRIX_N;i++){
-    for(j=0;j<RAND_MATRIX_M;j++){
-      cout<<randMatrix[i][j].x<<endl;
-      cout<<randMatrix[i][j].z<<endl;
-
-    }
+  k=30;
+  for(i=0;i<RAND_OBSTACLE;i++){
+    randObstacle[i].x = k;
+    randObstacle[i].type = rand()%2;
+    randObstacle[i].position = rand()%3 -1;
+    k+=100;
+    cout<<randObstacle[i].x<<endl;
   }
   // Registrovanje callback funkcija
   glutKeyboardFunc(onKeyboard);
@@ -123,6 +134,7 @@ void onKeyboard(unsigned char key, int x, int y){
       animationParameter = 0;
       animationOngoing = 0;
       firstTreeRow = 0;
+      firstObstacle = 0;
       limbMovementCoef = 0;
       descending = 0;
       turning = 0;
@@ -189,6 +201,17 @@ void onTimer(int id){
             firstTreeRow = 0;
           }
         }
+
+        for(int i=0;i<RAND_OBSTACLE;i++){
+          randObstacle[i].x -=1;
+        }
+        if(randObstacle[firstObstacle].x == -70){
+          randObstacle[firstObstacle].x = 9930;
+          firstObstacle++;
+          if(firstObstacle == RAND_OBSTACLE){
+            firstObstacle = 0;
+          }
+        }
       }
 
       if(shouldTurnRight && baltoPosition==1){
@@ -246,6 +269,9 @@ void onDisplay(void){
   gluLookAt(-15,10,0,30,3,0,0,1,0);
   // gluLookAt(20,10,0,-30,3,0,0,1,0);
 
+
+  //prepreke
+  // gluLookAt(-10,5,0,0,0,0,0,1,0);
   // u njusku
   // gluLookAt(20,2,0,5,3,0,0,1,0);
   // fino
@@ -254,11 +280,14 @@ void onDisplay(void){
   // gluLookAt(4,7,10,4,2,0,0,1,0);
   // gluLookAt(30,4,30,0,0,0,0,1,0);
 
+  // gluLookAt(0,10,10,0,0,0,0,1,0);
+  // gluLookAt(10*sin(animationParameter/360),3,10*cos(animationParameter/360),0,0,0,0,1,0);
+
   drawAxes(LEN);
 
   drawBalto(baltoPosition);
-
   drawTrack();
+  drawObstacles();
   drawTerrain();
 
   glutSwapBuffers();
