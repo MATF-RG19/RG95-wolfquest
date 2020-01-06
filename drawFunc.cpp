@@ -14,8 +14,6 @@ using namespace std;
 #define RAND_MATRIX_N 25
 #define RAND_MATRIX_M 9
 #define RAND_OBSTACLE 100
-#define SNOW_MATRIX 500
-
 // kidam cpp, nista clase nista oop :(
 struct TACKA{
   float x;
@@ -33,7 +31,7 @@ struct CHRISTMASTREE{
   int x;
   int z;
 };
-
+extern bool baltoRIP;
 extern float turning;
 extern float limbMovementCoef;
 extern vector<vector<CHRISTMASTREE>> randMatrix;
@@ -67,6 +65,62 @@ void setNormalAndVertex(TACKA a, TACKA b, TACKA c){
   glVertex3f(a.x, a.y, a.z);
   glVertex3f(b.x, b.y, b.z);
   glVertex3f(c.x, c.y, c.z);
+}
+
+void BaltoCrashed(int firstBaltoObstacle){
+
+  switch (randObstacle[firstBaltoObstacle].type) {
+    //STEEL
+    case 0:
+      if(randObstacle[firstBaltoObstacle].x<11 && randObstacle[firstBaltoObstacle].x>-5){
+        switch (randObstacle[firstBaltoObstacle].position) {
+          case -1:
+            if(turning<-5.0){
+              baltoRIP=true;
+              cout<<"STEEL LEFT"<<endl;
+            }
+            break;
+          case 0:
+            if(-3.0<turning && turning<3.0){
+              baltoRIP=true;
+              cout<<"STEEL MID"<<endl;
+            }
+            break;
+          case 1:
+            if(turning>5.0){
+              baltoRIP=true;
+              cout<<"STEEL RIGHT"<<endl;
+            }
+            break;
+        }
+      }
+      break;
+      //TREE
+    case 1:
+      if(randObstacle[firstBaltoObstacle].x<9 && randObstacle[firstBaltoObstacle].x>-2){
+        switch (randObstacle[firstBaltoObstacle].position) {
+          case -1:
+            if(turning<-3.0){
+              baltoRIP=true;
+              cout<<"TREE LEFT"<<endl;
+            }
+            break;
+          case 0:
+            if(-5.0<turning && turning<5.0){
+              baltoRIP=true;
+              cout<<"TREE MID"<<endl;
+            }
+            break;
+          case 1:
+            if(turning>3.0){
+              baltoRIP=true;
+              cout<<"TREE RIGHT"<<endl;
+            }
+            break;
+        }
+      }
+      break;
+    }
 }
 
 void drawTrack(void){
@@ -170,7 +224,8 @@ void drawChristmasTree(float x, float y, float z){
       glRotatef(90,1,0,0);
     glPopMatrix();
   glPopMatrix();
-  //probavam
+  //Wire preko toga ali znatno uspori iscrtavanje
+
   glPushMatrix();
     glTranslatef(x,y,z);
     glScalef(1.5,1.5,1.5);
@@ -204,6 +259,7 @@ void drawChristmasTree(float x, float y, float z){
       glTranslatef(0,0,-1.5);
     glPopMatrix();
   glPopMatrix();
+
 }
 
 void drawChristmasTreeObstacle(int position){
@@ -1000,16 +1056,12 @@ void drawSteelObstacle(int position){
   }
 }
 
-void drawSnow(void){
-
-}
 void drawObstacles(void){
   for(int j=0;j<RAND_OBSTACLE;j++){
-    glPushMatrix();
-      drawObstacle(randObstacle[j].x,randObstacle[j].type,randObstacle[j].position);
-    glPopMatrix();
+    drawObstacle(randObstacle[j].x,randObstacle[j].type,randObstacle[j].position);
   }
 }
+
 void drawObstacle(int x, int type, int position){
   switch (type) {
     case 0:
@@ -1037,6 +1089,9 @@ void drawBalto(int baltoPosition){
     TACKA a,b,c,A,B;
 
     glColor3f(0.1,0.1,0.8);
+    // if(baltoRIP){
+    // glColor3f(1,0,0);
+    // }
     glTranslatef(0,2.37+0.1-0.79,0);
 
     glPushMatrix();

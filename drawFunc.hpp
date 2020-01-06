@@ -12,6 +12,6 @@ void drawSteel(void);
 void drawSteelObstacle(int position);
 void drawObstacles(void);
 void drawObstacle(int x,int type,int position);
-void drawSnow(void);
+void BaltoCrashed(int firstBaltoObstacle);
 
 #endif

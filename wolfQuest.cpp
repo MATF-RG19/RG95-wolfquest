@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <cstdlib>
 #include <vector>
@@ -18,7 +19,7 @@ using namespace std;
 #define RAND_MATRIX_N 25
 #define RAND_MATRIX_M 9
 #define RAND_OBSTACLE 100
-#define SNOW_MATRIX 500
+
 // kidam cpp, nista clase nista oop :(
 struct CHRISTMASTREE{
   int randAngle;
@@ -32,11 +33,14 @@ struct OBSTACLE{
   int position;
   int x;
 };
+int firstBaltoObstacle = 0;
 int firstObstacle=0;
 int firstTreeRow=0;
 int shouldTurnRight = 0;
 int shouldTurnLeft = 0;
 float turning = 0;
+bool baltoRIP=false;
+
 vector<vector<CHRISTMASTREE>> randMatrix(RAND_MATRIX_N);
 vector<OBSTACLE> randObstacle(RAND_OBSTACLE);
 
@@ -66,8 +70,8 @@ int main(int argc, char **argv){
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
 
   // Postavljanje prozora
-  glutInitWindowSize(600, 600);
-  // glutInitWindowSize(600, 600);
+  // glutInitWindowSize(1200, 1200);
+  glutInitWindowSize(800,800);
   glutInitWindowPosition(100, 100);
   glutCreateWindow("Wolf Quest");
 
@@ -87,7 +91,6 @@ int main(int argc, char **argv){
       randMatrix[i][j].x=k;
       randMatrix[i][j].z=q;
       q+=15;
-      // cout<<randMatrix[i][j].x<<endl;
     }
     k+=25;
   }
@@ -97,8 +100,9 @@ int main(int argc, char **argv){
     randObstacle[i].type = rand()%2;
     randObstacle[i].position = rand()%3 -1;
     k+=100;
-    cout<<randObstacle[i].x<<endl;
   }
+  //ne zelimd a prva prepreka bude na sredini
+  randObstacle[0].position = -1;
   // Registrovanje callback funkcija
   glutKeyboardFunc(onKeyboard);
   glutDisplayFunc(onDisplay);
@@ -135,9 +139,14 @@ void onKeyboard(unsigned char key, int x, int y){
       animationOngoing = 0;
       firstTreeRow = 0;
       firstObstacle = 0;
+      firstBaltoObstacle = 0;
+      baltoRIP = false;
+      baltoPosition = 0;
       limbMovementCoef = 0;
       descending = 0;
       turning = 0;
+      shouldTurnRight = 0;
+      shouldTurnLeft = 0;
       glutPostRedisplay();
       break;
     case 's':
@@ -201,7 +210,6 @@ void onTimer(int id){
             firstTreeRow = 0;
           }
         }
-
         for(int i=0;i<RAND_OBSTACLE;i++){
           randObstacle[i].x -=1;
         }
@@ -212,44 +220,54 @@ void onTimer(int id){
             firstObstacle = 0;
           }
         }
+        if(randObstacle[firstBaltoObstacle].x==-10){
+          firstBaltoObstacle++;
+          cout<<firstBaltoObstacle<<endl;
+          if(firstBaltoObstacle==RAND_OBSTACLE){
+            firstBaltoObstacle = 0;
+          }
+        }
+        // if(!baltoRIP){
+          BaltoCrashed(firstBaltoObstacle);
+        // }
+        if(shouldTurnRight && baltoPosition==1){
+          turning+=0.2;
+          if(turning>=8){
+            turning=8;
+            shouldTurnRight=0;
+          }
+        }
+        if(shouldTurnRight && baltoPosition==0){
+          turning+=0.2;
+          if(turning>=0){
+            turning=0;
+            shouldTurnRight=0;
+          }
+        }
+        if(shouldTurnLeft && baltoPosition==-1){
+          turning-=0.2;
+          if(turning<=-8){
+            turning=-8;
+            shouldTurnLeft=0;
+          }
+        }
+        if(shouldTurnLeft && baltoPosition==0){
+          turning-=0.2;
+          if(turning<=0){
+            turning=0;
+            shouldTurnLeft=0;
+          }
+        }
+        if(limbMovementCoef == 30)
+            descending = 1;
+        if(limbMovementCoef == -30)
+            descending = 0;
+        if(!descending)
+            limbMovementCoef++;
+        if(descending)
+            limbMovementCoef--;
       }
 
-      if(shouldTurnRight && baltoPosition==1){
-        turning+=0.2;
-        if(turning>=8){
-          turning=8;
-          shouldTurnRight=0;
-        }
-      }
-      if(shouldTurnRight && baltoPosition==0){
-        turning+=0.2;
-        if(turning>=0){
-          turning=0;
-          shouldTurnRight=0;
-        }
-      }
-      if(shouldTurnLeft && baltoPosition==-1){
-        turning-=0.2;
-        if(turning<=-8){
-          turning=-8;
-          shouldTurnLeft=0;
-        }
-      }
-      if(shouldTurnLeft && baltoPosition==0){
-        turning-=0.2;
-        if(turning<=0){
-          turning=0;
-          shouldTurnLeft=0;
-        }
-      }
-      if(limbMovementCoef == 30)
-          descending = 1;
-      if(limbMovementCoef == -30)
-          descending = 0;
-      if(!descending)
-          limbMovementCoef++;
-      if(descending)
-          limbMovementCoef--;
     }
     glutPostRedisplay();
     if (animationOngoing)
@@ -269,9 +287,6 @@ void onDisplay(void){
   gluLookAt(-15,10,0,30,3,0,0,1,0);
   // gluLookAt(20,10,0,-30,3,0,0,1,0);
 
-
-  //prepreke
-  // gluLookAt(-10,5,0,0,0,0,0,1,0);
   // u njusku
   // gluLookAt(20,2,0,5,3,0,0,1,0);
   // fino
@@ -280,20 +295,16 @@ void onDisplay(void){
   // gluLookAt(4,7,10,4,2,0,0,1,0);
   // gluLookAt(30,4,30,0,0,0,0,1,0);
 
-  // gluLookAt(0,10,10,0,0,0,0,1,0);
-  // gluLookAt(10*sin(animationParameter/360),3,10*cos(animationParameter/360),0,0,0,0,1,0);
-
   drawAxes(LEN);
-
   drawBalto(baltoPosition);
   drawTrack();
-  drawObstacles();
   drawTerrain();
+  drawObstacles();
 
   glutSwapBuffers();
 }
 void lightInitialization(void){
-  float lightPosition[] = { 0, 40, 0, 0};
+  float lightPosition[] = { 5, 40, 0, 0};
   float lightAmbient[] = { 0.1, 0.1, 0.1, 0.1,1};
   float lightDiffuse[] = { 1, 1, 1, 1};
   float lightSpecular[] = { 0.9, 0.9, 0.9, 1};
