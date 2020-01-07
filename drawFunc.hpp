@@ -13,5 +13,8 @@ void drawSteelObstacle(int position);
 void drawObstacles(void);
 void drawObstacle(int x,int type,int position);
 void BaltoCrashed(int firstBaltoObstacle);
+void randInitialization(void);
+void countdown(void);
+
 
 #endif

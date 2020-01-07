@@ -12,8 +12,13 @@
 
 using namespace std;
 
+// GLUT returns it in ASCII format
+#define ESCAPE 27
+#define SPACEBAR 32
+
 #define TIMER_INTERVAL 20
-#define TIMER_ID 0
+#define TIMER_ID1 0
+#define TIMER_ID2 1
 #define LEN 100
 #define GODS_EYE 300
 #define RAND_MATRIX_N 25
@@ -33,6 +38,8 @@ struct OBSTACLE{
   int position;
   int x;
 };
+float cameraMovement = 0;
+int animationCamera = 1;
 int firstBaltoObstacle = 0;
 int firstObstacle=0;
 int firstTreeRow=0;
@@ -50,7 +57,7 @@ static int windowWidth;
 static int windowHeight;
 
 float animationParameter = 0;
-static float animationOngoing = 0;
+static float animationRunning = 0;
 static float descending = 0;
 float limbMovementCoef = 0;
 
@@ -79,30 +86,7 @@ int main(int argc, char **argv){
   for ( int i = 0 ; i < RAND_MATRIX_N; i++ )
     randMatrix[i].resize(RAND_MATRIX_M);
 
-  srand(time(NULL));
-  int i,j;
-  int k=-200;
-  int q=12;
-  for(i=0;i<RAND_MATRIX_N;i++){
-    q=12;
-    for(j=0;j<RAND_MATRIX_M;j++){
-      randMatrix[i][j].randAngle=rand() % 31;
-      randMatrix[i][j].randScale=((float)rand()) / ((float)RAND_MAX) / 3.0 + 0.66;
-      randMatrix[i][j].x=k;
-      randMatrix[i][j].z=q;
-      q+=15;
-    }
-    k+=25;
-  }
-  k=30;
-  for(i=0;i<RAND_OBSTACLE;i++){
-    randObstacle[i].x = k;
-    randObstacle[i].type = rand()%2;
-    randObstacle[i].position = rand()%3 -1;
-    k+=100;
-  }
-  //ne zelimd a prva prepreka bude na sredini
-  randObstacle[0].position = -1;
+  randInitialization();
   // Registrovanje callback funkcija
   glutKeyboardFunc(onKeyboard);
   glutDisplayFunc(onDisplay);
@@ -136,7 +120,7 @@ void onKeyboard(unsigned char key, int x, int y){
   switch(key){
     case 'r':
       animationParameter = 0;
-      animationOngoing = 0;
+      animationRunning = 0;
       firstTreeRow = 0;
       firstObstacle = 0;
       firstBaltoObstacle = 0;
@@ -147,20 +131,23 @@ void onKeyboard(unsigned char key, int x, int y){
       turning = 0;
       shouldTurnRight = 0;
       shouldTurnLeft = 0;
+      randInitialization();
       glutPostRedisplay();
       break;
     case 's':
     case 'S':
-      animationOngoing = 0;
+      animationRunning = 0;
       break;
-    case 'g':
-    case 'G':
-      if(!animationOngoing){
-        animationOngoing = 1;
-        glutTimerFunc(TIMER_INTERVAL, onTimer, TIMER_ID);
+    case SPACEBAR: //BUG 3xSpace dok vrti 3x brze ide
+      if(!animationRunning && animationCamera == 0){
+        animationRunning = 1;
+        glutTimerFunc(TIMER_INTERVAL, onTimer, TIMER_ID1);
+      }
+      else if(animationCamera){
+        glutTimerFunc(TIMER_INTERVAL, onTimer, TIMER_ID2);
       }
       break;
-    case 27:
+    case ESCAPE:
       exit(0);
       break;
   }
@@ -169,7 +156,7 @@ void onSpecialKeyPress(int key, int x, int y){
 
   switch(key){
     case GLUT_KEY_RIGHT:
-      if(animationOngoing){
+      if(animationRunning){
         shouldTurnRight=1;
         shouldTurnLeft=0;
         if(baltoPosition != 1){
@@ -179,7 +166,7 @@ void onSpecialKeyPress(int key, int x, int y){
         break;
       }
     case GLUT_KEY_LEFT:
-      if(animationOngoing){
+      if(animationRunning){
         shouldTurnLeft=1;
         shouldTurnRight=0;
         if(baltoPosition != -1){
@@ -192,16 +179,16 @@ void onSpecialKeyPress(int key, int x, int y){
 }
 
 void onTimer(int id){
-    if(id == TIMER_ID){
+    //TODO napraviti fino ubrzano, ne generise lepo nove jelke i prepreke
+    if(id == TIMER_ID1){
       animationParameter++;
-
-      if(animationOngoing){
+      if(animationRunning){
         for(int i=0;i<RAND_MATRIX_N;i++){
           for(int j=0;j<RAND_MATRIX_M;j++){
-            randMatrix[i][j].x -= 1;
+            randMatrix[i][j].x -= 3;
           }
         }
-        if(randMatrix[firstTreeRow][0].x == -225){
+        if(randMatrix[firstTreeRow][0].x < -225){
           for(int k=0;k<RAND_MATRIX_M;k++){
             randMatrix[firstTreeRow][k].x = 400;
           }
@@ -211,16 +198,16 @@ void onTimer(int id){
           }
         }
         for(int i=0;i<RAND_OBSTACLE;i++){
-          randObstacle[i].x -=1;
+          randObstacle[i].x -=3;
         }
-        if(randObstacle[firstObstacle].x == -70){
+        if(randObstacle[firstObstacle].x <-70){
           randObstacle[firstObstacle].x = 9930;
           firstObstacle++;
           if(firstObstacle == RAND_OBSTACLE){
             firstObstacle = 0;
           }
         }
-        if(randObstacle[firstBaltoObstacle].x==-10){
+        if(randObstacle[firstBaltoObstacle].x<-10){
           firstBaltoObstacle++;
           cout<<firstBaltoObstacle<<endl;
           if(firstBaltoObstacle==RAND_OBSTACLE){
@@ -269,9 +256,20 @@ void onTimer(int id){
       }
 
     }
+    else if(id == TIMER_ID2){
+      cameraMovement++;
+      if(cameraMovement>566){
+        countdown();
+        animationCamera = 0;
+        animationRunning = 1;
+      }
+    }
     glutPostRedisplay();
-    if (animationOngoing)
-      glutTimerFunc(TIMER_INTERVAL,onTimer,TIMER_ID);
+    if (animationRunning)
+      glutTimerFunc(TIMER_INTERVAL,onTimer,TIMER_ID1);
+    else if (animationCamera){
+      glutTimerFunc(TIMER_INTERVAL,onTimer,TIMER_ID2);
+    }
 }
 
 void onDisplay(void){
@@ -284,7 +282,12 @@ void onDisplay(void){
   //ispred
   // gluLookAt(10,2,2,5,2,0,0,1,0);
   // iza
-  gluLookAt(-15,10,0,30,3,0,0,1,0);
+  if(!animationCamera){
+    gluLookAt(-15,10,0,30,3,0,0,1,0);
+  }
+  else{
+    gluLookAt(15*sin(3*cameraMovement/360),1.67+cameraMovement/68,11*cos(3*cameraMovement/360),4,cameraMovement/68,0,0,1,0);
+  }
   // gluLookAt(20,10,0,-30,3,0,0,1,0);
 
   // u njusku

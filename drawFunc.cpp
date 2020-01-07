@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include <unistd.h>
 #include "drawFunc.hpp"
 
 using namespace std;
@@ -164,7 +165,7 @@ void drawTerrain(void){
   for(int i=0;i<RAND_MATRIX_N;i++){
     for(int j=0;j<RAND_MATRIX_M;j++){
       glPushMatrix();
-        glTranslatef(randMatrix[i][j].x,randMatrix[i][j].z/1.74-0.2,randMatrix[i][j].z);
+        glTranslatef(randMatrix[i][j].x,randMatrix[i][j].z/1.74-1,randMatrix[i][j].z);
         glRotatef(-randMatrix[i][j].randAngle,1,0,0);
         glScalef(randMatrix[i][j].randScale,randMatrix[i][j].randScale,randMatrix[i][j].randScale);
         drawChristmasTree(0,0,0);
@@ -184,7 +185,32 @@ void drawTerrain(void){
 
 
 }
-
+void randInitialization(void){
+  srand(time(NULL));
+  int k,q;
+  k=-200;
+  q=12;
+  for(int i=0;i<RAND_MATRIX_N;i++){
+    q=12;
+    for(int j=0;j<RAND_MATRIX_M;j++){
+      randMatrix[i][j].randAngle=rand() % 31;
+      randMatrix[i][j].randScale=((float)rand()) / ((float)RAND_MAX) / 3.0 + 0.66;
+      randMatrix[i][j].x=k;
+      randMatrix[i][j].z=q;
+      q+=15;
+    }
+    k+=25;
+  }
+  k=30;
+  for(int i=0;i<RAND_OBSTACLE;i++){
+    randObstacle[i].x = k;
+    randObstacle[i].type = rand()%2;
+    randObstacle[i].position = rand()%3 -1;
+    k+=100;
+  }
+  //ne zelimd a prva prepreka bude na sredini
+  randObstacle[0].position = -1;
+}
 void drawChristmasTree(float x, float y, float z){
   glPushMatrix();
     glTranslatef(x,y,z);
@@ -260,6 +286,35 @@ void drawChristmasTree(float x, float y, float z){
     glPopMatrix();
   glPopMatrix();
 
+}
+
+void countdown(void){
+  //TODO hocu da odbrojava 3 2 1.. mozda teksture
+  glColor3f(1,0,0);
+  glRasterPos3f(0,1,0);
+  char c3 = '3';
+  char c2 = '2';
+  char c1 = '1';
+  string sGo = "GO!!!";
+
+  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c3);
+
+  glutPostRedisplay();
+  usleep(1000000);
+  cout<<"prva sekunda"<<endl;
+  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c2);
+  usleep(1000000);
+  glutPostRedisplay();
+  cout<<"druga sekunda"<<endl;
+  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c1);
+  glutPostRedisplay();
+  usleep(1000000);
+  cout<<"treca sekunda"<<endl;
+  for(char c : sGo){
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c);
+  }
+  glutPostRedisplay();
+  usleep(1000000);
 }
 
 void drawChristmasTreeObstacle(int position){
@@ -1089,9 +1144,9 @@ void drawBalto(int baltoPosition){
     TACKA a,b,c,A,B;
 
     glColor3f(0.1,0.1,0.8);
-    // if(baltoRIP){
-    // glColor3f(1,0,0);
-    // }
+    if(baltoRIP){
+    glColor3f(1,0,0);
+    }
     glTranslatef(0,2.37+0.1-0.79,0);
 
     glPushMatrix();
@@ -1370,10 +1425,10 @@ void drawBalto(int baltoPosition){
         glRotatef(20,0,0,1);
         glRotatef(90,0,1,0);
         // duzi deo
-        glutSolidCone(0.60,2.5,7,1);
+        glutSolidCone(0.40,2.5,7,1);
         glRotatef(180,1,0,0);
         // kraci deo
-        glutSolidCone(0.60,1,7,1);
+        glutSolidCone(0.40,1,7,1);
       glPopMatrix();
 
       // glava desno
