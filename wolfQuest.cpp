@@ -9,9 +9,14 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include "drawFunc.hpp"
-
+#include "image.hpp"
 using namespace std;
 
+#define FILENAME0 "front.bmp"
+#define FILENAME1 "back.bmp"
+
+/* Identifikatori tekstura. */
+static GLuint names[2];
 // GLUT returns it in ASCII format
 #define ESCAPE 27
 #define SPACEBAR 32
@@ -68,7 +73,8 @@ static void onReshape(int width, int height);
 static void onDisplay(void);
 static void onTimer(int id);
 
-
+static void initialize(void);
+static float matrix[16];
 static void lightInitialization(void);
 static void enableOpenglOptions(void);
 
@@ -85,7 +91,7 @@ int main(int argc, char **argv){
   //predpr inicijalizacija
   for ( int i = 0 ; i < RAND_MATRIX_N; i++ )
     randMatrix[i].resize(RAND_MATRIX_M);
-
+  initialize();
   randInitialization();
   // Registrovanje callback funkcija
   glutKeyboardFunc(onKeyboard);
@@ -148,6 +154,7 @@ void onKeyboard(unsigned char key, int x, int y){
       }
       break;
     case ESCAPE:
+      glDeleteTextures(2, names);
       exit(0);
       break;
   }
@@ -282,14 +289,15 @@ void onDisplay(void){
   //ispred
   // gluLookAt(10,2,2,5,2,0,0,1,0);
   // iza
+
   if(!animationCamera){
-    gluLookAt(-15,10,0,30,3,0,0,1,0);
+    gluLookAt(-15,13,0,30,3,0,0,1,0);
   }
   else{
-    gluLookAt(15*sin(3*cameraMovement/360),1.67+cameraMovement/68,11*cos(3*cameraMovement/360),4,cameraMovement/68,0,0,1,0);
+    gluLookAt(15*sin(3*cameraMovement/360),1.67+cameraMovement/50,11*cos(3*cameraMovement/360),4,cameraMovement/68,0,0,1,0);
   }
   // gluLookAt(20,10,0,-30,3,0,0,1,0);
-
+  // gluLookAt(-15,10,0,30,3,0,0,1,0);
   // u njusku
   // gluLookAt(20,2,0,5,3,0,0,1,0);
   // fino
@@ -304,8 +312,48 @@ void onDisplay(void){
   drawTerrain();
   drawObstacles();
 
+  /* Crtaju se vrata kuce. */
+    glBindTexture(GL_TEXTURE_2D, names[0]);
+    glBegin(GL_QUADS);
+        glNormal3f(0, 0, -1);
+
+        glTexCoord2f(0, 0);
+        glVertex3f(250, 0,-300 );
+
+        glTexCoord2f(1, 0);
+        glVertex3f(250,300,-300);
+
+        glTexCoord2f(1, 1);
+        glVertex3f(250, 300, 300);
+
+        glTexCoord2f(0, 1);
+        glVertex3f(250, 0, 300);
+    glEnd();
+
+    /* Crta se zid kuce. */
+    glBindTexture(GL_TEXTURE_2D, names[1]);
+    glBegin(GL_QUADS);
+      glNormal3f(0, 0, -1);
+
+      glTexCoord2f(0, 0);
+      glVertex3f(-250, 0,-300 );
+
+      glTexCoord2f(1, 0);
+      glVertex3f(-250,300,-300);
+
+      glTexCoord2f(1, 1);
+      glVertex3f(-250, 300, 300);
+
+      glTexCoord2f(0, 1);
+      glVertex3f(-250, 0, 300);
+    glEnd();
+
+    /* Iskljucujemo aktivnu teksturu */
+    glBindTexture(GL_TEXTURE_2D, 0);
+
   glutSwapBuffers();
 }
+
 void lightInitialization(void){
   float lightPosition[] = { 5, 40, 0, 0};
   float lightAmbient[] = { 0.1, 0.1, 0.1, 0.1,1};
@@ -325,4 +373,72 @@ void enableOpenglOptions(void){
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_NORMALIZE);
   glEnable(GL_COLOR_MATERIAL);
+}
+static void initialize(void)
+{
+    /* Objekat koji predstavlja teskturu ucitanu iz fajla. */
+    Image * image;
+
+    /* Postavlja se boja pozadine. */
+    glClearColor(0, 0, 0, 0);
+
+    /* Ukljucuje se testiranje z-koordinate piksela. */
+    glEnable(GL_DEPTH_TEST);
+
+    /* Ukljucuju se teksture. */
+    glEnable(GL_TEXTURE_2D);
+
+    glTexEnvf(GL_TEXTURE_ENV,
+              GL_TEXTURE_ENV_MODE,
+              GL_REPLACE);
+
+    /*
+     * Inicijalizuje se objekat koji ce sadrzati teksture ucitane iz
+     * fajla.
+     */
+    image = image_init(0, 0);
+
+    /* Kreira se prva tekstura. */
+    image_read(image, FILENAME0);
+
+    /* Generisu se identifikatori tekstura. */
+    glGenTextures(2, names);
+
+    glBindTexture(GL_TEXTURE_2D, names[0]);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+                 image->width, image->height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+    /* Kreira se druga tekstura. */
+    image_read(image, FILENAME1);
+
+    glBindTexture(GL_TEXTURE_2D, names[1]);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+                 image->width, image->height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+    /* Iskljucujemo aktivnu teksturu */
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    /* Unistava se objekat za citanje tekstura iz fajla. */
+    image_done(image);
+
+    /* Inicijalizujemo matricu rotacije. */
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 }
