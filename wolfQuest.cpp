@@ -34,14 +34,14 @@ static GLuint names[2];
 struct CHRISTMASTREE{
   int randAngle;
   float randScale;
-  int x;
+  float x;
   int z;
 };
 
 struct OBSTACLE{
   int type;
   int position;
-  int x;
+  float x;
 };
 float cameraMovement = 0;
 int animationCamera = 1;
@@ -61,10 +61,12 @@ static int baltoPosition = 0;
 static int windowWidth;
 static int windowHeight;
 
+float acceleration = 0;
 float animationParameter = 0;
 static float animationRunning = 0;
 static float descending = 0;
 float limbMovementCoef = 0;
+float limbAccelation = 0;
 
 // callback funkcije
 static void onKeyboard(unsigned char key, int x, int y);
@@ -189,13 +191,57 @@ void onTimer(int id){
     //TODO napraviti fino ubrzano, ne generise lepo nove jelke i prepreke
     if(id == TIMER_ID1){
       animationParameter++;
+      acceleration+=0.002;
+      limbAccelation+=0.004;
+      if(limbAccelation>10){
+        limbAccelation=10;
+      }
+      if(acceleration>4){
+        acceleration=4;
+      }
       if(animationRunning){
         for(int i=0;i<RAND_MATRIX_N;i++){
           for(int j=0;j<RAND_MATRIX_M;j++){
-            randMatrix[i][j].x -= 3;
+            randMatrix[i][j].x -= acceleration;
           }
         }
         if(randMatrix[firstTreeRow][0].x < -225){
+          /*
+          originalno ako je na -225 znaci da
+          se otvorio prostor za sldeci red koji ce na 400 (const)
+
+          ako ode ispod -225 treba pomeriti na 400 - ta razlika (ubrzano)
+
+          *400 TAKE IT OR LEAVE IT*
+          ────────────────────██████──────────
+          ──────────────────██▓▓▓▓▓▓██────────
+          ────────────────██▓▓▓▓▒▒▒▒██────────
+          ────────────────██▓▓▒▒▒▒▒▒██────────
+          ──────────────██▓▓▓▓▒▒▒▒██──────────
+          ──────────────██▓▓▒▒▒▒▒▒██──────────
+          ────────────██▓▓▓▓▒▒▒▒▒▒██──────────
+          ────────────████▒▒████▒▒██──────────
+          ────────────██▓▓▒▒▒▒▒▒▒▒██──────────
+          ──────────██────▒▒────▒▒██──────────
+          ──────────████──▒▒██──▒▒██──────────
+          ──────────██────▒▒────▒▒██──────────
+          ──────────██▒▒▒▒▒▒▒▒▒▒▒▒██──────────
+          ──────────████████████▒▒▒▒██────────
+          ────────██▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██──────
+          ──────██▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒██────
+          ────██▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒██──
+          ──██▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒██
+          ██▓▓▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒██
+          ██▓▓▒▒▓▓▒▒▒▒▒▒▓▓▓▓▒▒▒▒▒▒▒▒▒▒▓▓▓▓▒▒██
+          ██▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓██
+          ──████▐▌▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▐▌▐▌████──
+          ────██▐▌▐▌▌▌▌▌▌▌▌▌▐▌▐▌▐▌▐▌▌▌▐▌██────
+          ────██▌▌▐▌▐▌▌▌▐▌▌▌▌▌▐▌▌▌▌▌▌▌▌▌██────
+          ──────██▌▌▐▌▐▌▐▌▐▌▐▌▐▌▐▌▌▌▌▌██──────
+          ──────██▐▌▐▌▐▌████████▐▌▌▌▌▌██──────
+          ────────██▒▒██────────██▒▒██────────
+          ────────██████────────██████────────
+          */
           for(int k=0;k<RAND_MATRIX_M;k++){
             randMatrix[firstTreeRow][k].x = 400;
           }
@@ -205,7 +251,7 @@ void onTimer(int id){
           }
         }
         for(int i=0;i<RAND_OBSTACLE;i++){
-          randObstacle[i].x -=3;
+          randObstacle[i].x -= acceleration;
         }
         if(randObstacle[firstObstacle].x <-70){
           randObstacle[firstObstacle].x = 9930;
@@ -252,14 +298,14 @@ void onTimer(int id){
             shouldTurnLeft=0;
           }
         }
-        if(limbMovementCoef == 30)
+        if(limbMovementCoef > 30)
             descending = 1;
-        if(limbMovementCoef == -30)
+        if(limbMovementCoef < -30)
             descending = 0;
         if(!descending)
-            limbMovementCoef++;
+            limbMovementCoef+=limbAccelation;
         if(descending)
-            limbMovementCoef--;
+            limbMovementCoef-=limbAccelation;
       }
 
     }

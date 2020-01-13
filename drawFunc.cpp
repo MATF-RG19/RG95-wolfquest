@@ -24,12 +24,12 @@ struct TACKA{
 struct OBSTACLE{
   int type;
   int position;
-  int x;
+  float x;
 };
 struct CHRISTMASTREE{
   int randAngle;
   float randScale;
-  int x;
+  float x;
   int z;
 };
 extern bool baltoRIP;
@@ -1117,7 +1117,7 @@ void drawObstacles(void){
   }
 }
 
-void drawObstacle(int x, int type, int position){
+void drawObstacle(float x, int type, int position){
   switch (type) {
     case 0:
       glPushMatrix();
