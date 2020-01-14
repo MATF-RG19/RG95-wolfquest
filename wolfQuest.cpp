@@ -24,6 +24,7 @@ static GLuint names[2];
 #define TIMER_INTERVAL 20
 #define TIMER_ID1 0
 #define TIMER_ID2 1
+#define TIMER_ID3 2
 #define LEN 100
 #define GODS_EYE 300
 #define RAND_MATRIX_N 25
@@ -43,8 +44,10 @@ struct OBSTACLE{
   int position;
   float x;
 };
+float avalancheMovement = 0;
 float cameraMovement = 0;
 int animationCamera = 1;
+int animationAvalanche = 0;
 int firstBaltoObstacle = 0;
 int firstObstacle=0;
 int firstTreeRow=0;
@@ -67,7 +70,8 @@ static float animationRunning = 0;
 static float descending = 0;
 float limbMovementCoef = 0;
 float limbAccelation = 0;
-
+float avalancheCameraMovement = 0;
+float avalancheTextureMovement = 1;
 // callback funkcije
 static void onKeyboard(unsigned char key, int x, int y);
 static void onSpecialKeyPress(int key, int x, int y);
@@ -267,9 +271,11 @@ void onTimer(int id){
             firstBaltoObstacle = 0;
           }
         }
-        // if(!baltoRIP){
-          BaltoCrashed(firstBaltoObstacle);
-        // }
+        BaltoCrashed(firstBaltoObstacle);
+        if(baltoRIP){
+          animationRunning = 0;
+          animationAvalanche = 1;
+        }
         if(shouldTurnRight && baltoPosition==1){
           turning+=0.2;
           if(turning>=8){
@@ -317,11 +323,26 @@ void onTimer(int id){
         animationRunning = 1;
       }
     }
+    else if(id == TIMER_ID3){
+      avalancheMovement++;
+      avalancheTextureMovement+=1.5;
+      avalancheCameraMovement++;
+      if(avalancheCameraMovement>60){
+        avalancheCameraMovement=60;
+      }
+      if(avalancheTextureMovement>290){
+        avalancheTextureMovement=290;
+        animationAvalanche=0;
+      }
+    }
     glutPostRedisplay();
     if (animationRunning)
       glutTimerFunc(TIMER_INTERVAL,onTimer,TIMER_ID1);
     else if (animationCamera){
       glutTimerFunc(TIMER_INTERVAL,onTimer,TIMER_ID2);
+    }
+    else if (animationAvalanche){
+      glutTimerFunc(TIMER_INTERVAL,onTimer,TIMER_ID3);
     }
 }
 
@@ -336,12 +357,16 @@ void onDisplay(void){
   // gluLookAt(10,2,2,5,2,0,0,1,0);
   // iza
 
-  if(!animationCamera){
+  if(animationRunning){
     gluLookAt(-15,13,0,30,3,0,0,1,0);
   }
-  else{
+  else if(animationCamera){
     gluLookAt(15*sin(3*cameraMovement/360),1.67+cameraMovement/50,11*cos(3*cameraMovement/360),4,cameraMovement/68,0,0,1,0);
   }
+  else{
+    gluLookAt(-15+avalancheCameraMovement,13,0,30-avalancheCameraMovement,3,0,0,1,0);
+  }
+
   // gluLookAt(20,10,0,-30,3,0,0,1,0);
   // gluLookAt(-15,10,0,30,3,0,0,1,0);
   // u njusku
@@ -382,16 +407,16 @@ void onDisplay(void){
       glNormal3f(0, 0, -1);
 
       glTexCoord2f(0, 0);
-      glVertex3f(-250, 0,-300 );
+      glVertex3f(-250+avalancheTextureMovement, 0-avalancheTextureMovement/5,-300 );
 
       glTexCoord2f(1, 0);
-      glVertex3f(-250,300,-300);
+      glVertex3f(-250+avalancheTextureMovement,300-avalancheTextureMovement/5,-300);
 
       glTexCoord2f(1, 1);
-      glVertex3f(-250, 300, 300);
+      glVertex3f(-250+avalancheTextureMovement, 300-avalancheTextureMovement/5, 300);
 
       glTexCoord2f(0, 1);
-      glVertex3f(-250, 0, 300);
+      glVertex3f(-250+avalancheTextureMovement, 0-avalancheTextureMovement/5, 300);
     glEnd();
 
     /* Iskljucujemo aktivnu teksturu */

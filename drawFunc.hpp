@@ -16,5 +16,4 @@ void BaltoCrashed(int firstBaltoObstacle);
 void randInitialization(void);
 void countdown(void);
 
-
 #endif

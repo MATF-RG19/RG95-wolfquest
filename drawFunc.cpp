@@ -1144,9 +1144,7 @@ void drawBalto(int baltoPosition){
     TACKA a,b,c,A,B;
 
     glColor3f(0.1,0.1,0.8);
-    if(baltoRIP){
-    glColor3f(1,0,0);
-    }
+    
     glTranslatef(0,2.37+0.1-0.79,0);
 
     glPushMatrix();
