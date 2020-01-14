@@ -8,8 +8,13 @@
 #include <GL/glut.h>
 #include <unistd.h>
 #include "drawFunc.hpp"
+#include "irrKlangLib/include/irrKlang.h"
 
 using namespace std;
+
+using namespace irrklang;
+
+#pragma comment (lib, "irrKlangLib/lib");
 
 #define GODS_EYE 300
 #define RAND_MATRIX_N 25
@@ -37,6 +42,8 @@ extern float turning;
 extern float limbMovementCoef;
 extern vector<vector<CHRISTMASTREE>> randMatrix;
 extern vector<OBSTACLE> randObstacle;
+extern ISound* music;
+extern ISoundEngine* engine;
 
 void drawAxes(float len){
   glDisable(GL_LIGHTING);
@@ -306,15 +313,40 @@ void countdown(void){
   usleep(1000000);
   glutPostRedisplay();
   cout<<"druga sekunda"<<endl;
+
+  if (music){
+    music->drop(); // release music stream.
+    cout<<"gotova ova muzika"<<endl;
+    engine->drop(); // delete engine
+  }
+  engine = createIrrKlangDevice(); //kreiranje zvuka
+  if (!engine){
+// ; // error starting up the engine
+    cout<<"greska muzika"<<endl;
+  }
+  music = engine->play3D("irrKlangLib/media/apcih.mp3",vec3df(0,0,0), true, false, true);
+
   glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c1);
   glutPostRedisplay();
-  usleep(1000000);
+  // for(int i=0;i<)
+  usleep(9000000);
+  if (music){
+    music->drop(); // release music stream.
+    cout<<"gotova ova muzika"<<endl;
+    engine->drop(); // delete engine
+  }
+  engine = createIrrKlangDevice(); //kreiranje zvuka
+  if (!engine){
+// ; // error starting up the engine
+    cout<<"greska muzika"<<endl;
+  }
+  music = engine->play3D("irrKlangLib/media/run.mp3",vec3df(0,0,0), true, false, true);
+
   cout<<"treca sekunda"<<endl;
   for(char c : sGo){
     glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c);
   }
   glutPostRedisplay();
-  usleep(1000000);
 }
 
 void drawChristmasTreeObstacle(int position){
@@ -1144,7 +1176,7 @@ void drawBalto(int baltoPosition){
     TACKA a,b,c,A,B;
 
     glColor3f(0.1,0.1,0.8);
-    
+
     glTranslatef(0,2.37+0.1-0.79,0);
 
     glPushMatrix();

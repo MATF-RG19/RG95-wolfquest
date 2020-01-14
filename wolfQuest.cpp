@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <cstdlib>
 #include <vector>
@@ -10,7 +9,15 @@
 #include <GL/glut.h>
 #include "drawFunc.hpp"
 #include "image.hpp"
+#include "irrKlangLib/include/irrKlang.h"
+
 using namespace std;
+
+using namespace irrklang;
+
+#pragma comment (lib, "irrKlangLib/lib");
+ISoundEngine* engine;
+ISound* music;
 
 #define FILENAME0 "front.bmp"
 #define FILENAME1 "back.bmp"
@@ -94,6 +101,14 @@ int main(int argc, char **argv){
   glutInitWindowPosition(100, 100);
   glutCreateWindow("Wolf Quest");
 
+  engine = createIrrKlangDevice(); //kreiranje zvuka
+  if (!engine){
+    return 0; // error starting up the engine
+    cout<<"greska muzika"<<endl;
+  }
+
+
+
   //predpr inicijalizacija
   for ( int i = 0 ; i < RAND_MATRIX_N; i++ )
     randMatrix[i].resize(RAND_MATRIX_M);
@@ -151,6 +166,7 @@ void onKeyboard(unsigned char key, int x, int y){
       animationRunning = 0;
       break;
     case SPACEBAR: //BUG 3xSpace dok vrti 3x brze ide
+      music = engine->play3D("irrKlangLib/media/maybe.mp3",vec3df(0,0,0), true, false, true);
       if(!animationRunning && animationCamera == 0){
         animationRunning = 1;
         glutTimerFunc(TIMER_INTERVAL, onTimer, TIMER_ID1);
@@ -161,6 +177,10 @@ void onKeyboard(unsigned char key, int x, int y){
       break;
     case ESCAPE:
       glDeleteTextures(2, names);
+      if (music)
+        music->drop(); // release music stream.
+
+      engine->drop(); // delete engine
       exit(0);
       break;
   }
@@ -195,7 +215,7 @@ void onTimer(int id){
     //TODO napraviti fino ubrzano, ne generise lepo nove jelke i prepreke
     if(id == TIMER_ID1){
       animationParameter++;
-      acceleration+=0.002;
+      acceleration+=0.001;
       limbAccelation+=0.004;
       if(limbAccelation>10){
         limbAccelation=10;
@@ -333,6 +353,10 @@ void onTimer(int id){
       if(avalancheTextureMovement>290){
         avalancheTextureMovement=290;
         animationAvalanche=0;
+        if (music)
+          music->drop(); // release music stream.
+
+        engine->drop(); // delete engine
       }
     }
     glutPostRedisplay();
