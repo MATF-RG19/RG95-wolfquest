@@ -7,36 +7,46 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <unistd.h>
-#include "drawFunc.hpp"
+#include "Funcs.hpp"
+
+/* biblioteka za muziku
+  Hvalaヾ(⌐■_■)ノ♪ Borise
+*/
 #include "irrKlangLib/include/irrKlang.h"
 
 using namespace std;
 
+// link sa irrKlag.dll
 using namespace irrklang;
-
 #pragma comment (lib, "irrKlangLib/lib");
 
-#define GODS_EYE 300
-#define RAND_MATRIX_N 25
-#define RAND_MATRIX_M 9
-#define RAND_OBSTACLE 100
-// kidam cpp, nista clase nista oop :(
+#define GODS_EYE 300 // dokle pogled seze
+#define RAND_MATRIX_N 25 //
+#define RAND_MATRIX_M 9 // dimenzije matrice jelki
+#define RAND_OBSTACLE 100 // broj prepreka
+
+// tacka u prostoru
 struct TACKA{
   float x;
   float y;
   float z;
 };
+
+// prepreka
 struct OBSTACLE{
-  int type;
-  int position;
-  float x;
+  int type; // Steel/Christmas tree
+  int position; // levo/sredina/desno -> -1/0/1
+  float x; // udaljenost od koordinatnog pocetka po x
 };
+
+// jelka
 struct CHRISTMASTREE{
-  int randAngle;
-  float randScale;
-  float x;
-  int z;
+  int randAngle; // nagib [0-30] levo/desno
+  float randScale; // velicina [0.7-1]
+  float x; // udaljenost od koordinatnog pocetka po x
+  int z;  // po z
 };
+
 extern bool baltoRIP;
 extern float turning;
 extern float limbMovementCoef;
@@ -49,17 +59,17 @@ void drawAxes(float len){
   glDisable(GL_LIGHTING);
 
   glBegin(GL_LINES);
-    glColor3f(1,0,0);
-    glVertex3f(0,0,0);
-    glVertex3f(len,0,0);
+    glColor3f(1, 0, 0);
+    glVertex3f(0, 0, 0);
+    glVertex3f(len, 0, 0);
 
-    glColor3f(0,1,0);
-    glVertex3f(0,0,0);
-    glVertex3f(0,len,0);
+    glColor3f(0, 1, 0);
+    glVertex3f(0, 0, 0);
+    glVertex3f(0, len, 0);
 
-    glColor3f(0,0,1);
-    glVertex3f(0,0,0);
-    glVertex3f(0,0,len);
+    glColor3f(0, 0, 1);
+    glVertex3f(0, 0, 0);
+    glVertex3f(0, 0, len);
   glEnd();
 
   glEnable(GL_LIGHTING);
@@ -83,21 +93,21 @@ void BaltoCrashed(int firstBaltoObstacle){
       if(randObstacle[firstBaltoObstacle].x<11 && randObstacle[firstBaltoObstacle].x>-5){
         switch (randObstacle[firstBaltoObstacle].position) {
           case -1:
-            if(turning<-5.0){
-              baltoRIP=true;
-              cout<<"STEEL LEFT"<<endl;
+            if(turning < -5.0){
+              baltoRIP = true;
+              // cout<<"STEEL LEFT"<<endl;
             }
             break;
           case 0:
-            if(-3.0<turning && turning<3.0){
-              baltoRIP=true;
-              cout<<"STEEL MID"<<endl;
+            if(-3.0 < turning && turning < 3.0){
+              baltoRIP = true;
+              // cout<<"STEEL MID"<<endl;
             }
             break;
           case 1:
-            if(turning>5.0){
-              baltoRIP=true;
-              cout<<"STEEL RIGHT"<<endl;
+            if(turning > 5.0){
+              baltoRIP = true;
+              // cout<<"STEEL RIGHT"<<endl;
             }
             break;
         }
@@ -108,21 +118,21 @@ void BaltoCrashed(int firstBaltoObstacle){
       if(randObstacle[firstBaltoObstacle].x<9 && randObstacle[firstBaltoObstacle].x>-2){
         switch (randObstacle[firstBaltoObstacle].position) {
           case -1:
-            if(turning<-3.0){
-              baltoRIP=true;
-              cout<<"TREE LEFT"<<endl;
+            if(turning < -3.0){
+              baltoRIP = true;
+              // cout<<"TREE LEFT"<<endl;
             }
             break;
           case 0:
-            if(-5.0<turning && turning<5.0){
-              baltoRIP=true;
-              cout<<"TREE MID"<<endl;
+            if(-5.0 < turning && turning < 5.0){
+              baltoRIP = true;
+              // cout<<"TREE MID"<<endl;
             }
             break;
           case 1:
-            if(turning>3.0){
-              baltoRIP=true;
-              cout<<"TREE RIGHT"<<endl;
+            if(turning > 3.0){
+              baltoRIP = true;
+              // cout<<"TREE RIGHT"<<endl;
             }
             break;
         }
@@ -133,246 +143,240 @@ void BaltoCrashed(int firstBaltoObstacle){
 
 void drawTrack(void){
   glPushMatrix();
-    glColor3f(0.7,0.7,0.7);
-    glTranslatef(0,-0.5,0);
-    glScalef(1000,1,24);
+    glColor3f(0.7, 0.7, 0.7);
+    glTranslatef(0, -0.5, 0);
+    glScalef(1000, 1, 24);
     glutSolidCube(1);
   glPopMatrix();
 
-  glColor3f(1,0,0);
+  glColor3f(1, 0, 0);
   glBegin(GL_LINES);
-    glVertex3f(-300,0,4);
-    glVertex3f(300,0,4);
-    glVertex3f(-300,0,-4);
-    glVertex3f(300,0,-4);
-    glVertex3f(-300,0,12);
-    glVertex3f(300,0,12);
-    glVertex3f(-300,0,-12);
-    glVertex3f(300,0,-12);
+    glVertex3f(-300, 0, 4);
+    glVertex3f(300, 0, 4);
+    glVertex3f(-300, 0, -4);
+    glVertex3f(300, 0, -4);
+    glVertex3f(-300, 0, 12);
+    glVertex3f(300, 0, 12);
+    glVertex3f(-300, 0, -12);
+    glVertex3f(300, 0, -12);
   glEnd();
 }
 
 void drawTerrain(void){
-  glColor3f(0.7,0.7,0.7);
+  glColor3f(0.7, 0.7, 0.7);
   glPushMatrix();
-    glTranslatef(0,-0.5,-12);
-    glRotatef(30,1,0,0);
-    glScalef(1000,1,500);
+    glTranslatef(0, -0.5, -12);
+    glRotatef(30, 1, 0, 0);
+    glScalef(1000, 1, 500);
     glutSolidCube(1);
   glPopMatrix();
 
-  glColor3f(0.7,0.7,0.7);
+  glColor3f(0.7, 0.7, 0.7);
   glPushMatrix();
-    glTranslatef(0,-0.5,12);
-    glRotatef(-30,1,0,0);
-    glScalef(1000,1,500);
+    glTranslatef(0, -0.5, 12);
+    glRotatef(-30, 1, 0, 0);
+    glScalef(1000, 1, 500);
     glutSolidCube(1);
   glPopMatrix();
 
-  for(int i=0;i<RAND_MATRIX_N;i++){
-    for(int j=0;j<RAND_MATRIX_M;j++){
+  // desno
+  for(int i = 0; i < RAND_MATRIX_N; i++){
+    for(int j = 0;j < RAND_MATRIX_M; j++){
       glPushMatrix();
-        glTranslatef(randMatrix[i][j].x,randMatrix[i][j].z/1.74-1,randMatrix[i][j].z);
-        glRotatef(-randMatrix[i][j].randAngle,1,0,0);
-        glScalef(randMatrix[i][j].randScale,randMatrix[i][j].randScale,randMatrix[i][j].randScale);
-        drawChristmasTree(0,0,0);
+        glTranslatef(randMatrix[i][j].x, randMatrix[i][j].z / 1.74 - 1, randMatrix[i][j].z);
+        glRotatef(-randMatrix[i][j].randAngle, 1, 0, 0);
+        glScalef(randMatrix[i][j].randScale, randMatrix[i][j].randScale, randMatrix[i][j].randScale);
+        drawChristmasTree(0 , 0, 0);
       glPopMatrix();
     }
   }
-  for(int i=0;i<RAND_MATRIX_N;i++){
-    for(int j=0;j<RAND_MATRIX_M;j++){
+  // levo
+  for(int i = 0; i < RAND_MATRIX_N; i++){
+    for(int j = 0; j < RAND_MATRIX_M; j++){
       glPushMatrix();
-        glTranslatef(randMatrix[i][j].x,randMatrix[i][j].z/1.74-0.2,-randMatrix[i][j].z);
-        glRotatef(randMatrix[i][j].randAngle,1,0,0);
-        glScalef(randMatrix[i][j].randScale,randMatrix[i][j].randScale,randMatrix[i][j].randScale);
-        drawChristmasTree(0,0,0);
+        glTranslatef(randMatrix[i][j].x, randMatrix[i][j].z / 1.74 - 1, -randMatrix[i][j].z);
+        glRotatef(randMatrix[i][j].randAngle, 1, 0, 0);
+        glScalef(randMatrix[i][j].randScale ,randMatrix[i][j].randScale, randMatrix[i][j].randScale);
+        drawChristmasTree(0, 0, 0);
       glPopMatrix();
     }
   }
-
-
 }
+
 void randInitialization(void){
   srand(time(NULL));
-  int k,q;
-  k=-200;
-  q=12;
-  for(int i=0;i<RAND_MATRIX_N;i++){
-    q=12;
-    for(int j=0;j<RAND_MATRIX_M;j++){
-      randMatrix[i][j].randAngle=rand() % 31;
-      randMatrix[i][j].randScale=((float)rand()) / ((float)RAND_MAX) / 3.0 + 0.66;
-      randMatrix[i][j].x=k;
-      randMatrix[i][j].z=q;
-      q+=15;
+  int k, q;
+  k = -200;
+  q = 12;
+  for(int i = 0; i < RAND_MATRIX_N; i++){
+    q = 12;
+    for(int j = 0; j < RAND_MATRIX_M; j++){
+      randMatrix[i][j].randAngle = rand() % 31;
+      randMatrix[i][j].randScale = ((float)rand()) / ((float)RAND_MAX) / 3.0 + 0.66;
+      randMatrix[i][j].x = k;
+      randMatrix[i][j].z = q;
+      q += 15;
     }
-    k+=25;
+    k += 25;
   }
-  k=30;
-  for(int i=0;i<RAND_OBSTACLE;i++){
+  k = 30;
+  for(int i = 0; i < RAND_OBSTACLE; i++){
     randObstacle[i].x = k;
-    randObstacle[i].type = rand()%2;
-    randObstacle[i].position = rand()%3 -1;
-    k+=100;
+    randObstacle[i].type = rand() % 2;
+    randObstacle[i].position = rand() % 3 - 1;
+    k += 100;
   }
-  //ne zelimd a prva prepreka bude na sredini
+  //ne zelim a prva prepreka bude na sredini
   randObstacle[0].position = -1;
+
+  randMatrix[8][0].randAngle = 0;
+  randMatrix[8][0].randScale = 0.5;
 }
+
 void drawChristmasTree(float x, float y, float z){
   glPushMatrix();
-    glTranslatef(x,y,z);
-    glScalef(1.5,1.5,1.5);
-    glColor3f(0,0.4,0.1);
+    glTranslatef(x, y, z);
+    glScalef(1.5, 1.5, 1.5);
+    glColor3f(0, 0.4, 0.1);
     GLUquadric* cyl = gluNewQuadric();
 
     glPushMatrix();
-      glRotatef(-90,1,0,0);
-      glTranslatef(0,0,1.5);//bilo2
+      glRotatef(-90, 1, 0, 0);
+      glTranslatef(0, 0, 1.5);// bilo 2
 
-      glTranslatef(0,0,8);
-      glutSolidCone(1.3,1.6,12,1);
-      glTranslatef(0,0,-8);
+      glTranslatef(0, 0, 8);
+      glutSolidCone(1.3 , 1.6, 12, 1);
+      glTranslatef(0, 0, -8);
 
-      glTranslatef(0,0,6.8);
-      glutSolidCone(1.8,2.4,12,1);
+      glTranslatef(0, 0, 6.8);
+      glutSolidCone(1.8, 2.4, 12, 1);
       glTranslatef(0,0,-6.8);
 
-      glTranslatef(0,0,5.4);
-      glutSolidCone(2.2,2.8,12,1);
-      glTranslatef(0,0,-5.4);
+      glTranslatef(0, 0, 5.4);
+      glutSolidCone(2.2, 2.8, 12, 1);
+      glTranslatef(0, 0, -5.4);
 
-      glTranslatef(0,0,3.8);
-      glutSolidCone(2.8,3.2,12,1);
-      glTranslatef(0,0,-3.8);
+      glTranslatef(0, 0, 3.8);
+      glutSolidCone(2.8, 3.2, 12, 1);
+      glTranslatef(0, 0, -3.8);
 
-      glTranslatef(0,0,2);
-      glutSolidCone(3.1,3.6,12,1);
-      glTranslatef(0,0,-2);
+      glTranslatef(0, 0, 2);
+      glutSolidCone(3.1, 3.6, 12, 1);
+      glTranslatef(0, 0, -2);
 
-      glutSolidCone(3.4,4,12,1);
-      glTranslatef(0,0,-1.5);
+      glutSolidCone(3.4, 4, 12, 1);
+      glTranslatef(0, 0, -1.5);
 
-      glColor3f(0.3,0.15,0);
-      gluCylinder(cyl,0.75,0.75,2,10,1);
-      glRotatef(90,1,0,0);
+      glColor3f(0.3, 0.15, 0);
+      gluCylinder(cyl, 0.75, 0.75, 2,10, 1);
+      glRotatef(90, 1, 0, 0);
     glPopMatrix();
   glPopMatrix();
-  //Wire preko toga ali znatno uspori iscrtavanje
-
+  // wire preko toga ali znatno uspori(mnogo crtanja)
+  // might delete later
+  /*
   glPushMatrix();
-    glTranslatef(x,y,z);
-    glScalef(1.5,1.5,1.5);
-    glColor3f(0,0,0);
+    glTranslatef(x, y, z);
+    glScalef(1.5, 1.5, 1.5);
+    glColor3f(0, 0, 0);
 
     glPushMatrix();
-      glRotatef(-90,1,0,0);
-      glTranslatef(0,0,1.5);//bilo2
+      glRotatef(-90, 1, 0, 0);
+      glTranslatef(0, 0, 1.5); // bilo 2
 
-      glTranslatef(0,0,8);
-      glutWireCone(1.3,1.6,12,1);
-      glTranslatef(0,0,-8);
+      glTranslatef(0, 0, 8);
+      glutWireCone(1.3, 1.6, 12, 1);
+      glTranslatef(0, 0, -8);
 
-      glTranslatef(0,0,6.8);
-      glutWireCone(1.8,2.4,12,1);
-      glTranslatef(0,0,-6.8);
+      glTranslatef(0, 0, 6.8);
+      glutWireCone(1.8, 2.4, 12, 1);
+      glTranslatef(0, 0, -6.8);
 
-      glTranslatef(0,0,5.4);
-      glutWireCone(2.2,2.8,12,1);
-      glTranslatef(0,0,-5.4);
+      glTranslatef(0, 0, 5.4);
+      glutWireCone(2.2, 2.8, 12, 1);
+      glTranslatef(0, 0, -5.4);
 
-      glTranslatef(0,0,3.8);
-      glutWireCone(2.8,3.2,12,1);
-      glTranslatef(0,0,-3.8);
+      glTranslatef(0, 0, 3.8);
+      glutWireCone(2.8, 3.2, 12, 1);
+      glTranslatef(0, 0, -3.8);
 
-      glTranslatef(0,0,2);
-      glutWireCone(3.1,3.6,12,1);
-      glTranslatef(0,0,-2);
+      glTranslatef(0, 0, 2);
+      glutWireCone(3.1, 3.6, 12, 1);
+      glTranslatef(0, 0, -2);
 
-      glutWireCone(3.4,4,12,1);
-      glTranslatef(0,0,-1.5);
+      glutWireCone(3.4, 4, 12,1);
+      glTranslatef(0, 0, -1.5);
     glPopMatrix();
   glPopMatrix();
-
+  */
 }
 
 void countdown(void){
-  //TODO hocu da odbrojava 3 2 1.. mozda teksture
-  glColor3f(1,0,0);
-  glRasterPos3f(0,1,0);
-  char c3 = '3';
-  char c2 = '2';
-  char c1 = '1';
-  string sGo = "GO!!!";
 
-  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c3);
 
   glutPostRedisplay();
   usleep(1000000);
-  cout<<"prva sekunda"<<endl;
-  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c2);
   usleep(1000000);
-  glutPostRedisplay();
-  cout<<"druga sekunda"<<endl;
 
+  // ugasiti Borisa, pogledaj crtani
   if (music){
-    music->drop(); // release music stream.
-    cout<<"gotova ova muzika"<<endl;
-    engine->drop(); // delete engine
+    music->drop();
+    engine->drop();
   }
+
+  // zvuk kijanja, to pokrenulo lavinu
+  // ozbiljno pogledaj crtani to mi omiljeni -> Balto(1995)!!!
   engine = createIrrKlangDevice(); //kreiranje zvuka
   if (!engine){
-// ; // error starting up the engine
+    // hmmm ne bi ovo trebalo
     cout<<"greska muzika"<<endl;
   }
-  music = engine->play3D("irrKlangLib/media/apcih.mp3",vec3df(0,0,0), true, false, true);
-
-  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c1);
-  glutPostRedisplay();
-  // for(int i=0;i<)
+  music = engine->play3D("irrKlangLib/media/apcih.mp3", vec3df(0 , 0, 0), true, false, true);
   usleep(9000000);
   if (music){
-    music->drop(); // release music stream.
-    cout<<"gotova ova muzika"<<endl;
-    engine->drop(); // delete engine
+    music->drop();
+    // cout<<"gotova ova muzika"<<endl;
+    engine->drop();
   }
-  engine = createIrrKlangDevice(); //kreiranje zvuka
+  // run.mp3
+  engine = createIrrKlangDevice();
   if (!engine){
-// ; // error starting up the engine
     cout<<"greska muzika"<<endl;
   }
   music = engine->play3D("irrKlangLib/media/run.mp3",vec3df(0,0,0), true, false, true);
 
-  cout<<"treca sekunda"<<endl;
-  for(char c : sGo){
-    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c);
-  }
   glutPostRedisplay();
 }
 
 void drawChristmasTreeObstacle(int position){
 
+  // ako je pozicija 0(sredina) jelka stoji pravo
+  // inace je "pala" i okrenuta td vrh pokazuje ka centru staze(levo/desno)
   switch (position) {
+    // LEFT
     case -1:
       glPushMatrix();
-        glTranslatef(0,0.5,-12);
-        glRotatef(90,1,0,0);
-        glScalef(0.7,0.5,0.7);
-        drawChristmasTree(0,0,0);
+        glTranslatef(0, 0.5, -12);
+        glRotatef(90, 1, 0, 0);
+        glScalef(0.7, 0.5, 0.7);
+        drawChristmasTree(0, 0, 0);
       glPopMatrix();
       break;
+    // MID
     case 0:
       glPushMatrix();
-        glTranslatef(0,0.5,0);
-        glScalef(0.7,0.5,0.7);
-        drawChristmasTree(0,0,0);
+        glTranslatef(0, 0.5, 0);
+        glScalef(0.7, 0.5, 0.7);
+        drawChristmasTree(0, 0, 0);
       glPopMatrix();
       break;
+    // RIGHT
     case 1:
       glPushMatrix();
-        glTranslatef(0,0.5,12);
-        glRotatef(-90,1,0,0);
-        glScalef(0.7,0.5,0.7);
-        drawChristmasTree(0,0,0);
+        glTranslatef(0, 0.5, 12);
+        glRotatef(-90, 1, 0, 0);
+        glScalef(0.7, 0.5, 0.7);
+        drawChristmasTree(0, 0, 0);
       glPopMatrix();
       break;
   }
@@ -1119,6 +1123,10 @@ void drawSteel(void){
 }
 
 void drawSteelObstacle(int position){
+  /*
+  rotiran licem ka Baltu i zavisno od pozicije
+  transliran na sredinu jedne od 3 trake
+  */
   switch (position) {
     case -1:
       glPushMatrix();
@@ -1144,22 +1152,24 @@ void drawSteelObstacle(int position){
 }
 
 void drawObstacles(void){
-  for(int j=0;j<RAND_OBSTACLE;j++){
-    drawObstacle(randObstacle[j].x,randObstacle[j].type,randObstacle[j].position);
+  for(int j = 0; j < RAND_OBSTACLE; j++){
+    drawObstacle(randObstacle[j].x, randObstacle[j].type, randObstacle[j].position);
   }
 }
 
 void drawObstacle(float x, int type, int position){
   switch (type) {
+    // STEEL
     case 0:
       glPushMatrix();
-        glTranslatef(x,0,0);
+        glTranslatef(x, 0, 0);
         drawSteelObstacle(position);
       glPopMatrix();
       break;
+    // TREE
     case 1:
       glPushMatrix();
-        glTranslatef(x,0,0);
+        glTranslatef(x, 0, 0);
         drawChristmasTreeObstacle(position);
       glPopMatrix();
       break;
