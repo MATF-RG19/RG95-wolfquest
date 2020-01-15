@@ -149,17 +149,17 @@ void drawTrack(void){
     glutSolidCube(1);
   glPopMatrix();
 
-  glColor3f(1, 0, 0);
-  glBegin(GL_LINES);
-    glVertex3f(-300, 0, 4);
-    glVertex3f(300, 0, 4);
-    glVertex3f(-300, 0, -4);
-    glVertex3f(300, 0, -4);
-    glVertex3f(-300, 0, 12);
-    glVertex3f(300, 0, 12);
-    glVertex3f(-300, 0, -12);
-    glVertex3f(300, 0, -12);
-  glEnd();
+  // glColor3f(1, 0, 0);
+  // glBegin(GL_LINES);
+  //   glVertex3f(-300, 0, 4);
+  //   glVertex3f(300, 0, 4);
+  //   glVertex3f(-300, 0, -4);
+  //   glVertex3f(300, 0, -4);
+  //   glVertex3f(-300, 0, 12);
+  //   glVertex3f(300, 0, 12);
+  //   glVertex3f(-300, 0, -12);
+  //   glVertex3f(300, 0, -12);
+  // glEnd();
 }
 
 void drawTerrain(void){
@@ -1921,9 +1921,9 @@ void drawBalto(int baltoPosition){
     glPopMatrix();
 
     // hitbox
-    glColor3f(1,1,0);
-    glTranslatef(duzina/2,visina/2,0);
-    glScalef(duzina,visina,sirina);
-    glutWireCube(1);
+    // glColor3f(1,1,0);
+    // glTranslatef(duzina/2,visina/2,0);
+    // glScalef(duzina,visina,sirina);
+    // glutWireCube(1);
   glPopMatrix();
 }

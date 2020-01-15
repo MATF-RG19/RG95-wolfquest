@@ -122,7 +122,7 @@ int main(int argc, char **argv){
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
 
   // Postavljanje prozora
-  glutInitWindowSize(1400, 800);
+  glutInitWindowSize(1100, 800);
   glutInitWindowPosition(100, 100);
   glutCreateWindow("Wolf Quest");
 
@@ -319,7 +319,7 @@ void onTimer(int id){
     acceleration += 0.001;
     limbAccelation += 0.004;
     score++;
-    if(score == 5000){
+    if(score == 4800){
       if (music){
         music->drop();
         engine->drop();
