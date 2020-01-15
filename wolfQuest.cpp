@@ -7,11 +7,13 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include "Funcs.hpp"
-#include "image.hpp"
+#include "drawings/drawFunc.hpp"
+#include "textures/image.hpp"
+#include "other/handy.hpp"
 
-// biblioteka za muzik
-// Hvala ヾ(⌐■_■)ノ♪ Borise
+/* biblioteka za muziku
+  Hvalaヾ(⌐■_■)ノ♪ Borise
+*/
 #include "irrKlangLib/include/irrKlang.h"
 
 using namespace std;
@@ -22,8 +24,8 @@ using namespace irrklang;
 ISoundEngine* engine;
 ISound* music;
 
-#define FILENAME0 "front.bmp"
-#define FILENAME1 "back.bmp"
+#define FILENAME0 "textures/front.bmp"
+#define FILENAME1 "textures/back.bmp"
 
 // identifikatori tekstura
 static GLuint names[2];
@@ -187,23 +189,16 @@ void onKeyboard(unsigned char key, int x, int y){
     ? Sto se tice stop-a, velike online igrice
     nemaju pause dugme pa u tom duhu da obrisem i ja
     (Da mi je jednostavno uradio bih, ali kad se stopira
-    npr dok ide prva animacija on kad bude trebalo zapravo
-    da krene on stoji a muzika pici dalje, to samo jedan od mnogih
+    npr dok ide prva animacija on umesto da krene
+    stoji a muzika pici dalje, to samo jedan od mnogih
     situacija koje korisnik moze da proba i zaista nmg da sve
-    slucajeve prolazim, sto manje moci dati korisniku to nama lakse)
+    slucajeve prolazim)
 
     ? Scor cu ispisvati u terminal jer
     u prethodnim verzijama sam ubacivao u countdown funkciji
     ispis jednostavnog teksta gde je namera bila odbrojavati
     3,2,1 GO... i krece Balto da trci, ali nikakav tekst
     ja video nisam.
-    Ma nije ni taj scor bitan, nek Balto samo trci da ga
-    lavina ne pojede
-    Lek je svako stigao 1925e stigao u Nome u mojoj igrici ne mora
-
-    Poz od Toma
-    E i jos jednom, pogledaj crtani bas je fin(Balto, 1995)
-    ಠ_ಥ Pogledacete jel da?!
 
     **********************************************************
     case 'r':
