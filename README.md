@@ -1,8 +1,8 @@
-# 🐺 WOLF QUEST 
+# Wolf Quest 🐺 
 
 ### 📝 Gameplay i info:
 ![readme](https://user-images.githubusercontent.com/43257971/72408798-38f41900-3764-11ea-864f-b0b488ca92fd.gif)<br>
-Wolf Quest je tip endless runner igrice(skoro).Cilj je izbegavati prepreke krecuci se levo/desno i ne dozvoliti da te lavina zatrpa(zakaciti prepreku)."skoro endless" zato sto nisam mogao ostaviti da se tek tako igra do smrti vec su podeseni parametri za scor i kraj igre gde ako skupite preko 4800 poena(sto je zapravo 4800 puta pozvana funkcija za tajmer(run animation)) prozor se gasi i u terminalu stize poruka Co...(skupite ih 👍/ pronadjite u kodu 👎) ili ako pak zakacite prepreku i lavina Vas zatrpa u terminalu se ispise.. 😄
+Wolf Quest je tip endless runner igrice(skoro).<br>Cilj je izbegavati prepreke krecuci se levo/desno i ne dozvoliti da te lavina zatrpa(zakaciti prepreku).<br>"Skoro endless" zato sto nisam mogao ostaviti da se tek tako igra do smrti vec su podeseni parametri za scor tako da ako dovoljno prepreka prodjete prozor se gasi i u terminalu stize poruka Co...(skupite ih 👍/ pronadjite u kodu 👎) ili ako pak zakacite prepreku i lavina Vas zatrpa u terminalu se ispise.. 😄<br>
 Traka sa preprekama je sacinjena od 3 dela i u zavinosti od pritiska dugmeta ◀ / ▶ Balto(vuk) se pomera u traku levo/desno od trenutne.<br>
 :exclamation:Tip: Ne morate cekati da se animacija kretanja npr desno potpuno zavrsi kako bi skrenuli levo
 
