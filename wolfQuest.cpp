@@ -314,7 +314,7 @@ void onTimer(int id){
     acceleration += 0.001;
     limbAccelation += 0.004;
     score++;
-    if(score == 4800){
+    if(score == 4710){
       if (music){
         music->drop();
         engine->drop();
