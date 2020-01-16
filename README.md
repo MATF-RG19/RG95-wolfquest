@@ -2,7 +2,7 @@
 
 ### 📝 Gameplay i info:
 ![readme](https://user-images.githubusercontent.com/43257971/72408798-38f41900-3764-11ea-864f-b0b488ca92fd.gif)<br>
-Wolf Quest je tip endless runner igrice(skoro).<br>Cilj je izbegavati prepreke krecuci se levo/desno i ne dozvoliti da te lavina zatrpa(zakaciti prepreku).<br>"Skoro endless" zato sto nisam mogao ostaviti da se tek tako igra do smrti vec su podeseni parametri za scor tako da ako dovoljno prepreka prodjete prozor se gasi i u terminalu stize poruka Co...(skupite ih 👍/ pronadjite u kodu 👎) ili ako pak zakacite prepreku i lavina Vas zatrpa u terminalu se ispise.. 😄<br>
+Wolf Quest je tip endless runner igrice (skoro).<br>Cilj je izbegavati prepreke krecuci se levo/desno i ne dozvoliti da te lavina zatrpa(zakaciti prepreku).<br>"Skoro endless" zato sto nisam mogao ostaviti da se tek tako igra do smrti vec su podeseni parametri za scor tako da ako dovoljno prepreka prodjete prozor se gasi i u terminalu stize poruka Co...(skupite ih 👍/ pronadjite u kodu 👎) ili ako pak zakacite prepreku i lavina Vas zatrpa u terminalu se ispise.. 😄<br>
 Traka sa preprekama je sacinjena od 3 dela i u zavinosti od pritiska dugmeta ◀ / ▶ Balto(vuk) se pomera u traku levo/desno od trenutne.<br>
 :exclamation:Tip: Ne morate cekati da se animacija kretanja npr desno potpuno zavrsi kako bi skrenuli levo
 
@@ -41,4 +41,4 @@ Za kompletni dozivljaj preporucujem gledanje celokupnog crtanog filma ->[https:/
 Nadam se da ce Vam se dopasti! 🐺
 ### 📣 Napomena:
 📦 biblioteka "irrKlangLib" za muziku preuzeta sa: [https://www.ambiera.com/irrklang/](https://www.ambiera.com/irrklang/)<br>
-📦 biblioteka "imageLib" za teksture preuzeta od asistenta Rastka Djordjevica [http://www.matf.bg.ac.rs/p/-rastko-djordjevic](http://www.matf.bg.ac.rs/p/-rastko-djordjevic)
+📦 biblioteka "textures" za teksture preuzeta od asistenta Rastka Djordjevica [http://www.matf.bg.ac.rs/p/-rastko-djordjevic](http://www.matf.bg.ac.rs/p/-rastko-djordjevic)
