@@ -135,7 +135,7 @@ void randInitialization(void){
 void countdown(void){
   glutPostRedisplay();
   usleep(1000000);
-  usleep(1000000);
+  usleep(500000);
 
   // ugasiti Borisa, pogledaj crtani
   if (music){
