@@ -13,7 +13,7 @@ ostalo je crtanje trouglova (poly izgled)
 void drawBalto(int baltoPosition);
 
 // jelka od valjka i 6 piramida(kupe sa malo slices/stacks)
-void drawChristmasTree(float x,float y,float z);
+void drawChristmasTree(float x, float y, float z);
 
 // jedna jelka pomerena na traku(position)
 void drawChristmasTreeObstacle(int position);
@@ -38,7 +38,7 @@ void drawObstacles(void);
  u zavisnosti od tipa(Steel/Jelka) crta prepreku na udaljenosti x
  i na traci position
 */
-void drawObstacle(float x,int type,int position);
+void drawObstacle(float x, int type, int position);
 
 // razvucena kocka
 void drawTrack(void);
@@ -48,6 +48,5 @@ void drawTrack(void);
 i rotirane pod uglom 30* i na njih dodate jelke
 */
 void drawTerrain(void);
-
 
 #endif
