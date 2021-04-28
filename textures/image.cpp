@@ -1,7 +1,7 @@
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "image.hpp"
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Hvala (☞ຈل͜ຈ)☞ Rasto
 Image *image_init(int width, int height) {
@@ -12,11 +12,11 @@ Image *image_init(int width, int height) {
   assert(width >= 0 && height >= 0);
 
   /* Alocira se prostor za smestanje clanova strukture. */
-  image = (Image *) malloc(sizeof(Image));
+  image = (Image *)malloc(sizeof(Image));
   assert(image != NULL);
 
   /* Inicijlizuju se clanovi strukture. */
-  image->width = width;
+  image->width  = width;
   image->height = height;
   if (width == 0 || height == 0)
     image->pixels = NULL;
@@ -79,7 +79,7 @@ void image_read(Image *image, char *filename) {
    * Od podataka iz drugog zaglavlja koristimo samo informacije
    * o dimenzijama slike.
    */
-  image->width = bih.width;
+  image->width  = bih.width;
   image->height = bih.height;
 
   /*
@@ -92,7 +92,8 @@ void image_read(Image *image, char *filename) {
   else if (bih.bitcount == 32)
     image->pixels = (char *)malloc(4 * bih.width * bih.height * sizeof(char));
   else {
-    fprintf(stderr, "image_read(): Podrzane su samo slike koje po pikselu cuvaju 24 ili 32 bita podataka.\n");
+    fprintf(stderr, "image_read(): Podrzane su samo slike koje po pikselu "
+                    "cuvaju 24 ili 32 bita podataka.\n");
     exit(1);
   }
   assert(image->pixels != NULL);
@@ -106,14 +107,15 @@ void image_read(Image *image, char *filename) {
      */
     for (i = 0; i < bih.width * bih.height; i++) {
       /*
-       * Ovo mozda izgleda cudno, to sto se komponente boje citaju u suprotnom redosledu,
-       * tj. prvo plava, pa zelena, pa crvena, ali tako pise u specifikaciji bmp formata.
+       * Ovo mozda izgleda cudno, to sto se komponente boje citaju u suprotnom
+       * redosledu, tj. prvo plava, pa zelena, pa crvena, ali tako pise u
+       * specifikaciji bmp formata.
        */
       fread(&b, sizeof(char), 1, file);
       fread(&g, sizeof(char), 1, file);
       fread(&r, sizeof(char), 1, file);
 
-      image->pixels[3 * i] = r;
+      image->pixels[3 * i]     = r;
       image->pixels[3 * i + 1] = g;
       image->pixels[3 * i + 2] = b;
     }
@@ -129,7 +131,7 @@ void image_read(Image *image, char *filename) {
       fread(&r, sizeof(char), 1, file);
       fread(&a, sizeof(char), 1, file);
 
-      image->pixels[4 * i] = r;
+      image->pixels[4 * i]     = r;
       image->pixels[4 * i + 1] = g;
       image->pixels[4 * i + 2] = b;
       image->pixels[4 * i + 3] = a;
