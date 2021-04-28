@@ -167,7 +167,7 @@ void onReshape(int width, int height) {
   // Postavljanje projekcije
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60, (float)width / height, 1, GODS_EYE);
+  gluPerspective(60, (float) width / height, 1, GODS_EYE);
 }
 
 void onKeyboard(unsigned char key, int x, int y) {

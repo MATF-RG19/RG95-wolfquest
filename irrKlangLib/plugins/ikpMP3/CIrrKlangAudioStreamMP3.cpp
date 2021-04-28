@@ -95,7 +95,7 @@ ik_s32 CIrrKlangAudioStreamMP3::readFrames(void *target,
   const int frameSize = Format.getFrameSize();
 
   int framesRead = 0;
-  ik_u8 *out     = (ik_u8 *)target;
+  ik_u8 *out     = (ik_u8 *) target;
 
   while (framesRead < frameCountToRead) {
     // no more samples?  ask the MP3 for more
@@ -137,8 +137,8 @@ bool CIrrKlangAudioStreamMP3::decodeFrame() {
     }
 
     int rv = mpaudec_decode_frame(
-        TheMPAuDecContext, (ik_s16 *)DecodeBuffer, &outputSize,
-        (ik_u8 *)InputBuffer + InputPosition, InputLength - InputPosition);
+        TheMPAuDecContext, (ik_s16 *) DecodeBuffer, &outputSize,
+        (ik_u8 *) InputBuffer + InputPosition, InputLength - InputPosition);
 
     if (rv < 0)
       return false;
@@ -213,7 +213,7 @@ bool CIrrKlangAudioStreamMP3::setPosition(ik_s32 pos) {
 
     int scan_position = 0;
     int target_frame  = 0;
-    int frame_count   = (int)FramePositionData.size();
+    int frame_count   = (int) FramePositionData.size();
 
     while (target_frame < frame_count) {
       int frame_size = FramePositionData[target_frame].size;
@@ -234,7 +234,7 @@ bool CIrrKlangAudioStreamMP3::setPosition(ik_s32 pos) {
 
     int i;
     for (i = 0; i < target_frame; i++) {
-      if (i >= (int)FramePositionData.size()) {
+      if (i >= (int) FramePositionData.size()) {
         // internal error
         setPosition(0);
         return false;
@@ -265,7 +265,7 @@ CIrrKlangAudioStreamMP3::QueueBuffer::QueueBuffer() {
   Capacity = 256;
   Size     = 0;
 
-  Buffer = (ik_u8 *)malloc(Capacity);
+  Buffer = (ik_u8 *) malloc(Capacity);
 }
 
 CIrrKlangAudioStreamMP3::QueueBuffer::~QueueBuffer() { free(Buffer); }
@@ -281,7 +281,7 @@ void CIrrKlangAudioStreamMP3::QueueBuffer::write(const void *buffer, int size) {
   }
 
   if (needRealloc) {
-    Buffer = (ik_u8 *)realloc(Buffer, Capacity);
+    Buffer = (ik_u8 *) realloc(Buffer, Capacity);
   }
 
   memcpy(Buffer + Size, buffer, size);

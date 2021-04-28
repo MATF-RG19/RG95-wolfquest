@@ -114,7 +114,7 @@ void randInitialization(void) {
     for (int j = 0; j < RAND_MATRIX_M; j++) {
       randMatrix[i][j].randAngle = rand() % 31;
       randMatrix[i][j].randScale =
-          ((float)rand()) / ((float)RAND_MAX) / 3.0 + 0.66;
+          ((float) rand()) / ((float) RAND_MAX) / 3.0 + 0.66;
       randMatrix[i][j].x = k;
       randMatrix[i][j].z = q;
       q += 15;

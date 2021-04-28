@@ -64,7 +64,7 @@ protected:
     //! reads data, returns how much was read
     ik_s32 read(void *buffer, ik_u32 sizeToRead) {
       printf("CMyReadFile: read %d bytes\n", sizeToRead);
-      return (ik_s32)fread(buffer, 1, sizeToRead, File);
+      return (ik_s32) fread(buffer, 1, sizeToRead, File);
     }
 
     //! changes position in file, returns true if successful

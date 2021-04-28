@@ -89,7 +89,7 @@ int main(int argc, const char **argv) {
     // and also print the play position
 
     char stringForDisplay[] = "          +         ";
-    int charpos             = (int)((pos3d.X + radius) / radius * 10.0f);
+    int charpos             = (int) ((pos3d.X + radius) / radius * 10.0f);
     if (charpos >= 0 && charpos < 20)
       stringForDisplay[charpos] = 'o';
     int playPos = music ? music->getPlayPosition() : 0;
@@ -114,7 +114,7 @@ int main(int argc, const char **argv) {
         // didn't specify the sound to start paused or to track it (as we did
         // above with the music), so we also don't need to call drop().
 
-        vec3df pos(fmodf((float)rand(), radius * 2) - radius, 0, 0);
+        vec3df pos(fmodf((float) rand(), radius * 2) - radius, 0, 0);
 
         const char *filename;
 

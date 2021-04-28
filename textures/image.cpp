@@ -12,7 +12,7 @@ Image *image_init(int width, int height) {
   assert(width >= 0 && height >= 0);
 
   /* Alocira se prostor za smestanje clanova strukture. */
-  image = (Image *)malloc(sizeof(Image));
+  image = (Image *) malloc(sizeof(Image));
   assert(image != NULL);
 
   /* Inicijlizuju se clanovi strukture. */
@@ -21,7 +21,7 @@ Image *image_init(int width, int height) {
   if (width == 0 || height == 0)
     image->pixels = NULL;
   else {
-    image->pixels = (char *)malloc(3 * width * height * sizeof(char));
+    image->pixels = (char *) malloc(3 * width * height * sizeof(char));
     assert(image->pixels != NULL);
   }
 
@@ -88,9 +88,9 @@ void image_read(Image *image, char *filename) {
    * odgovarajuce duzine.
    */
   if (bih.bitcount == 24)
-    image->pixels = (char *)malloc(3 * bih.width * bih.height * sizeof(char));
+    image->pixels = (char *) malloc(3 * bih.width * bih.height * sizeof(char));
   else if (bih.bitcount == 32)
-    image->pixels = (char *)malloc(4 * bih.width * bih.height * sizeof(char));
+    image->pixels = (char *) malloc(4 * bih.width * bih.height * sizeof(char));
   else {
     fprintf(stderr, "image_read(): Podrzane su samo slike koje po pikselu "
                     "cuvaju 24 ili 32 bita podataka.\n");
