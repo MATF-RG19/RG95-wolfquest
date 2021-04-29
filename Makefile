@@ -1,4 +1,4 @@
-CXX	= g++
+CXX	= g++ -g
 CC	= gcc
 CFLAGS	= -c 
 LDLIBS	= -lglut -lGL -lGLU
