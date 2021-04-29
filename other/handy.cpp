@@ -12,13 +12,13 @@
 /* biblioteka za muziku
   Hvalaヾ(⌐■_■)ノ♪ Borise
 */
-#include "../irrKlangLib/include/irrKlang.h"
+// #include "../irrKlangLib/include/irrKlang.h"
 
 using namespace std;
 
 // link sa irrKlag.dll
-using namespace irrklang;
-#pragma comment(lib, "irrKlangLib/lib");
+// using namespace irrklang;
+// #pragma comment(lib, "irrKlangLib/lib");
 
 #define RAND_MATRIX_N 25 //
 #define RAND_MATRIX_M 9 // dimenzije matrice jelki
@@ -43,8 +43,8 @@ extern bool baltoRIP;
 extern float turning;
 extern vector<vector<CHRISTMASTREE>> randMatrix;
 extern vector<OBSTACLE> randObstacle;
-extern ISound *music;
-extern ISoundEngine *engine;
+// extern ISound *music;
+// extern ISoundEngine *engine;
 
 void BaltoCrashed(int firstBaltoObstacle) {
 
@@ -141,33 +141,33 @@ void countdown(void) {
   usleep(500000);
 
   // ugasiti Borisa, pogledaj crtani
-  if (music) {
-    music->drop();
-    engine->drop();
-  }
+  // if (music) {
+    // music->drop();
+    // engine->drop();
+  // }
 
   // zvuk kijanja, to pokrenulo lavinu
   // ozbiljno pogledaj crtani to mi omiljeni -> Balto(1995)!!!
-  engine = createIrrKlangDevice(); // kreiranje zvuka
-  if (!engine) {
+  // engine = createIrrKlangDevice(); // kreiranje zvuka
+  // if (!engine) {
     // hmmm ne bi ovo trebalo
-    cout << "greska muzika" << endl;
-  }
-  music = engine->play3D("irrKlangLib/media/apcih.mp3", vec3df(0, 0, 0), true,
-                         false, true);
+    // cout << "greska muzika" << endl;
+  // }
+  // music = engine->play3D("irrKlangLib/media/apcih.mp3", vec3df(0, 0, 0), true,
+                        //  false, true);
   usleep(9000000);
-  if (music) {
-    music->drop();
+  // if (music) {
+    // music->drop();
     // cout<<"gotova ova muzika"<<endl;
-    engine->drop();
-  }
+    // engine->drop();
+  // }
   // run.mp3
-  engine = createIrrKlangDevice();
-  if (!engine) {
-    cout << "greska muzika" << endl;
-  }
-  music = engine->play3D("irrKlangLib/media/run.mp3", vec3df(0, 0, 0), true,
-                         false, true);
+  // engine = createIrrKlangDevice();
+  // if (!engine) {
+    // cout << "greska muzika" << endl;
+  // }
+  // music = engine->play3D("irrKlangLib/media/run.mp3", vec3df(0, 0, 0), true,
+                        //  false, true);
 
   glutPostRedisplay();
 }

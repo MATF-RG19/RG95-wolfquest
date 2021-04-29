@@ -11,18 +11,16 @@
 #include <string>
 #include <vector>
 
-/* biblioteka za muziku
-  Hvalaヾ(⌐■_■)ノ♪ Borise
-*/
-#include "irrKlangLib/include/irrKlang.h"
+
+// #include "irrKlangLib/include/irrKlang.h"
 
 using namespace std;
-using namespace irrklang;
+// using namespace irrklang;
 
 // link sa irrKlag.dll
-#pragma comment(lib, "irrKlangLib/lib");
-ISoundEngine *engine;
-ISound *music;
+// #pragma comment(lib, "irrKlangLib/lib");
+// ISoundEngine *engine;
+// ISound *music;
 
 #define FILENAME0 "textures/front.bmp"
 #define FILENAME1 "textures/back.bmp"
@@ -129,10 +127,10 @@ int main(int argc, char **argv) {
   glutCreateWindow("Wolf Quest");
   glutFullScreen();
   // kreiranje zvuka
-  engine = createIrrKlangDevice();
-  if (!engine) {
-    cout << "meh" << endl;
-  }
+  // engine = createIrrKlangDevice();
+  // if (!engine) {
+    // cout << "meh" << endl;
+  // }
 
   // inicijalizacija tekstura, sume i prepreka
   for (int i = 0; i < RAND_MATRIX_N; i++) {
@@ -256,8 +254,8 @@ void onKeyboard(unsigned char key, int x, int y) {
   case SPACEBAR:
     if (!isPressed) {
       isPressed = true;
-      music     = engine->play3D("irrKlangLib/media/maybe.mp3", vec3df(0, 0, 0),
-                             true, false, true);
+      // music     = engine->play3D("irrKlangLib/media/maybe.mp3", vec3df(0, 0, 0),
+                            //  true, false, true);
       if (!animationRunning && animationCamera == 0) {
         animationRunning = 1;
         glutTimerFunc(TIMER_INTERVAL, onTimer, TIMER_ID1);
@@ -270,10 +268,10 @@ void onKeyboard(unsigned char key, int x, int y) {
   // LIGHTS OUT
   case ESCAPE:
     glDeleteTextures(2, names);
-    if (music) {
-      music->drop();
-      engine->drop();
-    }
+    // if (music) {
+      // music->drop();
+      // engine->drop();
+    // }
 
     exit(0);
     break;
@@ -315,10 +313,10 @@ void onTimer(int id) {
     limbAccelation += 0.004;
     score++;
     if (score == 4710) {
-      if (music) {
-        music->drop();
-        engine->drop();
-      }
+      // if (music) {
+        // music->drop();
+        // engine->drop();
+      // }
       cout << "Congratulations, you have successfully brought\n";
       cout << "cure to Nome, we are forever grateful\n";
       cout << "Hell we might even build you a statue in NY" << endl;
@@ -489,10 +487,10 @@ void onTimer(int id) {
     if (avalancheTextureMovement > 290) {
       avalancheTextureMovement = 290;
       animationAvalanche       = 0;
-      if (music) {
-        music->drop();
-        engine->drop();
-      }
+      // if (music) {
+        // music->drop();
+        // engine->drop();
+      // }
       cout << "Your score: ";
       cout << score;
       cout << "\nDont give up now, you got this!" << endl;
