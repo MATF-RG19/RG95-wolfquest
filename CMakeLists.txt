@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(wolfQuest)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 add_subdirectory(textures)
 
 add_executable(wolfQuest wolfQuest.cpp drawings/drawFunc.cpp drawings/drawFunc.hpp other/handy.cpp other/handy.hpp textures/image.cpp textures/image.hpp) 

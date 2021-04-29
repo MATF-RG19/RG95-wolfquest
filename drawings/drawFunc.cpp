@@ -178,6 +178,8 @@ void drawChristmasTree(float x, float y, float z) {
   glRotatef(90, 1, 0, 0);
   glPopMatrix();
   glPopMatrix();
+
+  free(cyl);
   // wire preko toga ali znatno uspori(mnogo crtanja)
   /*
   glPushMatrix();
@@ -990,6 +992,7 @@ void drawSteel(void) {
   glutSolidCone(0.15, 0.2, 4, 1);
   glPopMatrix();
   glPopMatrix();
+  free(cyl);
 }
 
 void drawSteelObstacle(int position) {
@@ -1799,4 +1802,5 @@ void drawBalto(int baltoPosition) {
   // glScalef(duzina,visina,sirina);
   // glutWireCube(1);
   glPopMatrix();
+  free(cyl);
 }

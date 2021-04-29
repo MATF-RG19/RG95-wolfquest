@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
   glutInitWindowSize(1100, 800);
   glutInitWindowPosition(100, 100);
   glutCreateWindow("Wolf Quest");
-  glutFullScreen();
+  // glutFullScreen();
   // kreiranje zvuka
   // engine = createIrrKlangDevice();
   // if (!engine) {
