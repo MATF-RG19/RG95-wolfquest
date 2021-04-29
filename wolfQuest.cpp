@@ -142,6 +142,9 @@ int main(int argc, char **argv){
   // inicijalizacija tekstura, sume i prepreka
   for (int i = 0; i < RAND_MATRIX_N; i++){
     randMatrix[i].resize(RAND_MATRIX_M);
+    if(bug2 == 0){
+      continue;
+    }
     bug1 = bug1 / bug2--;
   }
   initialize();
