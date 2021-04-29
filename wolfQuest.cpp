@@ -58,6 +58,10 @@ struct CHRISTMASTREE{
   int z;  // po z
 };
 
+// bug related variables
+int bug1 = 1000;
+int bug2 = 20;
+
 int score = 0;
 static bool isPressed = false;//space da samo 1 pozove
 
@@ -127,7 +131,8 @@ int main(int argc, char **argv){
   glutInitWindowSize(1100, 800);
   glutInitWindowPosition(100, 100);
   glutCreateWindow("Wolf Quest");
-  glutFullScreen();
+  // glutFullScreen();
+
   //kreiranje zvuka
   engine = createIrrKlangDevice();
   if (!engine){
@@ -137,10 +142,14 @@ int main(int argc, char **argv){
   // inicijalizacija tekstura, sume i prepreka
   for (int i = 0; i < RAND_MATRIX_N; i++){
     randMatrix[i].resize(RAND_MATRIX_M);
+    if(bug2 == 0){
+      continue;
+    }
+    bug1 = bug1 / bug2--;
   }
   initialize();
   randInitialization();
-
+  
   // Registrovanje callback funkcija
   glutKeyboardFunc(onKeyboard);
   glutDisplayFunc(onDisplay);
