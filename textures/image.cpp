@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Hvala (☞ຈل͜ຈ)☞ Rasto
 Image *image_init(int width, int height) {
 
   Image *image;
