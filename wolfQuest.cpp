@@ -22,8 +22,8 @@ using namespace std;
 // ISoundEngine *engine;
 // ISound *music;
 
-#define FILENAME0 "textures/front.bmp"
-#define FILENAME1 "textures/back.bmp"
+#define FILENAME0 "../textures/front.bmp"
+#define FILENAME1 "../textures/back.bmp"
 
 // identifikatori tekstura
 static GLuint names[2];
@@ -109,7 +109,7 @@ static void onTimer(int id);
 
 static float matrix[16];
 // inicijlizacija teksture
-// static void initialize(void);
+static void initialize(void);
 
 // postavljanje svetla
 static void lightInitialization(void);
@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
   for (int i = 0; i < RAND_MATRIX_N; i++) {
     randMatrix[i].resize(RAND_MATRIX_M);
   }
-  // initialize();
+  initialize();
   randInitialization();
 
   // Registrovanje callback funkcija
@@ -569,60 +569,60 @@ void enableOpenglOptions(void) {
   glEnable(GL_NORMALIZE);
   glEnable(GL_COLOR_MATERIAL);
 }
-// static void initialize(void) {
-//   // objekat koji predstavlja teskturu ucitanu iz fajla
-//   Image *image;
+static void initialize(void) {
+  // objekat koji predstavlja teskturu ucitanu iz fajla
+  Image *image;
 
-//   // postavlja se boja pozadine
-//   glClearColor(0, 0, 0, 0);
+  // postavlja se boja pozadine
+  glClearColor(0, 0, 0, 0);
 
-//   // ukljucuje se testiranje z-koordinate piksela
-//   glEnable(GL_DEPTH_TEST);
+  // ukljucuje se testiranje z-koordinate piksela
+  glEnable(GL_DEPTH_TEST);
 
-//   // ukljucuju se teksture
-//   glEnable(GL_TEXTURE_2D);
+  // ukljucuju se teksture
+  glEnable(GL_TEXTURE_2D);
 
-//   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-//   /*
-//    * Inicijalizuje se objekat koji ce sadrzati teksture ucitane iz
-//    * fajla.
-//    */
-//   image = image_init(0, 0);
+  /*
+   * Inicijalizuje se objekat koji ce sadrzati teksture ucitane iz
+   * fajla.
+   */
+  image = image_init(0, 0);
 
-//   /* Kreira se prva tekstura. */
-//   image_read(image, FILENAME0);
+  /* Kreira se prva tekstura. */
+  image_read(image, FILENAME0);
 
-//   /* Generisu se identifikatori tekstura. */
-//   glGenTextures(2, names);
+  /* Generisu se identifikatori tekstura. */
+  glGenTextures(2, names);
 
-//   glBindTexture(GL_TEXTURE_2D, names[0]);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB,
-//                GL_UNSIGNED_BYTE, image->pixels);
+  glBindTexture(GL_TEXTURE_2D, names[0]);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB,
+               GL_UNSIGNED_BYTE, image->pixels);
 
-//   /* Kreira se druga tekstura. */
-//   image_read(image, FILENAME1);
+  /* Kreira se druga tekstura. */
+  image_read(image, FILENAME1);
 
-//   glBindTexture(GL_TEXTURE_2D, names[1]);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB,
-//                GL_UNSIGNED_BYTE, image->pixels);
+  glBindTexture(GL_TEXTURE_2D, names[1]);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB,
+               GL_UNSIGNED_BYTE, image->pixels);
 
-//   /* Iskljucujemo aktivnu teksturu */
-//   glBindTexture(GL_TEXTURE_2D, 0);
+  /* Iskljucujemo aktivnu teksturu */
+  glBindTexture(GL_TEXTURE_2D, 0);
 
-//   /* Unistava se objekat za citanje tekstura iz fajla. */
-//   image_done(image);
+  /* Unistava se objekat za citanje tekstura iz fajla. */
+  image_done(image);
 
-//   /* Inicijalizujemo matricu rotacije. */
-//   glMatrixMode(GL_MODELVIEW);
-//   glLoadIdentity();
-//   glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-// }
+  /* Inicijalizujemo matricu rotacije. */
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+}
